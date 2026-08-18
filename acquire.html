@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acquire 2023 Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Prevent text selection during fast tapping */
+    button, input {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    /* Hide spin buttons for chrome, safari, edge, firefox */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col justify-between p-2 sm:p-4 selection:bg-indigo-500 selection:text-white">
+
+  <header class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2 sm:mb-3 shrink-0">
+    <div class="flex items-center gap-2">
+      <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-100 flex items-center gap-1.5">
+        <i class="fa-solid fa-chart-line text-amber-400"></i>
+        <span>ACQUIRE <span class="text-xs text-amber-400/90 font-mono font-normal">2023</span></span>
+      </h1>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <!-- Compact Segmented Mode Switcher -->
+      <div class="bg-slate-900 p-0.5 rounded-lg border border-slate-800 flex items-center text-xs">
+        <button id="btn-tycoon" onclick="setMode('tycoon')" 
+          class="px-2.5 py-1 rounded-md font-medium transition text-slate-100 bg-indigo-600 shadow-sm">
+          タイクーン
+        </button>
+        <button id="btn-classic" onclick="setMode('classic')" 
+          class="px-2.5 py-1 rounded-md font-medium transition text-slate-400 hover:text-slate-100">
+          クラシック
+        </button>
+      </div>
+
+      <!-- 株価ボード確認ボタン (アイコンのみ・最右端) -->
+      <button onclick="toggleModal(true)" 
+        class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 rounded-lg text-xs flex items-center justify-center transition shrink-0 active:scale-95"
+        title="株価ボード（元情報）を開く"
+        aria-label="株価ボードを開く">
+        <i class="fa-solid fa-table text-slate-400"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 space-y-1.5 sm:space-y-2 overflow-y-auto pr-0.5 pb-28 sm:pb-36" id="hotel-list">
+    <!-- Hotel Cards dynamically rendered here -->
+  </main>
+
+  <!-- 株価ボード (2023年版) モーダル -->
+  <div id="board-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleModal(false)">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- モーダルヘッダー -->
+      <div class="p-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+        <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-table text-slate-400"></i>
+          <span id="modal-title">株価ボード（2023年版）</span>
+        </h2>
+        <button onclick="toggleModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-md text-xs flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <!-- モーダル本文 (テーブル) -->
+      <div class="p-2 sm:p-3 overflow-y-auto flex-1 font-mono" id="modal-table-container">
+        <!-- JSでモードに応じてテーブルを描画 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 戦術参謀 モーダル -->
+  <div id="ai-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleAiModal(false)">
+    <div class="bg-slate-900 border border-indigo-900/80 rounded-xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- モーダルヘッダー -->
+      <div class="p-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+        <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+          <span>AI戦術参謀 (Gemini)</span>
+        </h2>
+        <button onclick="toggleAiModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-md text-xs flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- モーダル内容 -->
+      <div class="p-3 overflow-y-auto flex-1 space-y-3 font-sans text-xs">
+        <!-- クイックアクションボタン -->
+        <div class="space-y-1.5">
+          <div class="text-[10px] text-slate-400 font-medium">クイックAI診断</div>
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="runAiAnalysis('current')" class="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold flex items-center gap-1 transition shadow-sm active:scale-95">
+              <i class="fa-solid fa-chart-line text-indigo-200"></i>
+              <span>現在の戦況を全体診断</span>
+            </button>
+            <button onclick="runAiAnalysis('buy')" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
+              💡 狙い目の購入株
+            </button>
+            <button onclick="runAiAnalysis('merger')" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
+              🔀 併合・安全化対策
+            </button>
+          </div>
+        </div>
+
+        <!-- AI 回答表示エリア -->
+        <div id="ai-response-box" class="bg-slate-950 border border-slate-800 rounded-lg p-3 min-h-[140px] text-slate-200 leading-relaxed overflow-y-auto max-h-[300px]">
+          <div class="text-slate-400 text-center py-8">
+            <i class="fa-solid fa-robot text-2xl mb-2 text-indigo-400/60"></i>
+            <p>「現在の戦況を全体診断」または質問を入力してください。<br>盤面のホテルコマ数や株価から最適戦略をアドバイスします。</p>
+          </div>
+        </div>
+
+        <!-- カスタム質問入力フォーム -->
+        <form onsubmit="handleAiSubmit(event)" class="flex gap-1.5 pt-1 border-t border-slate-800">
+          <input type="text" id="ai-custom-input" placeholder="例: サクソンとタワーが併合しそうだがどちらの株を買うべき？" 
+            class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+          <button type="submit" id="ai-send-btn" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg text-xs flex items-center gap-1 transition shrink-0 active:scale-95">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 7 Hotels Definition with Exact Visual Brand Colors
+    const HOTELS = [
+      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  border: 'border-l-red-500',    textColor: 'text-red-400' },
+      { id: 'Tower',       name: 'Tower',       tier: 'small',  border: 'border-l-amber-400',  textColor: 'text-amber-300' },
+      { id: 'American',    name: 'American',    tier: 'medium', border: 'border-l-blue-500',   textColor: 'text-blue-400' },
+      { id: 'Festival',    name: 'Festival',    tier: 'medium', border: 'border-l-emerald-500', textColor: 'text-emerald-400' },
+      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', border: 'border-l-purple-500', textColor: 'text-purple-400' },
+      { id: 'Continental', name: 'Continental', tier: 'large',  border: 'border-l-cyan-400',   textColor: 'text-cyan-300' },
+      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  border: 'border-l-orange-500', textColor: 'text-orange-400' }
+    ];
+
+    // Master Evaluation Table (2023 Rules)
+    const EVAL_TABLE = [
+      { price: 200,  small: [2, 2],   medium: null,    large: null,    tycoon: [2000, 1500, 1000], classic: [2000, 1000] },
+      { price: 300,  small: [3, 3],   medium: [2, 2],  large: null,    tycoon: [3000, 2200, 1500], classic: [3000, 1500] },
+      { price: 400,  small: [4, 4],   medium: [3, 3],  large: [2, 2],  tycoon: [4000, 3000, 2000], classic: [4000, 2000] },
+      { price: 500,  small: [5, 5],   medium: [4, 4],  large: [3, 3],  tycoon: [5000, 3700, 2500], classic: [5000, 2500] },
+      { price: 600,  small: [6, 10],  medium: [5, 5],  large: [4, 4],  tycoon: [6000, 4200, 3000], classic: [6000, 3000] },
+      { price: 700,  small: [11, 20], medium: [6, 10], large: [5, 5],  tycoon: [7000, 5000, 3500], classic: [7000, 3500] },
+      { price: 800,  small: [21, 30], medium: [11,20], large: [6, 10], tycoon: [8000, 5700, 4000], classic: [8000, 4000] },
+      { price: 900,  small: [31, 40], medium: [21,30], large: [11,20], tycoon: [9000, 6200, 4500], classic: [9000, 4500] },
+      { price: 1000, small: [41, 999],medium: [31,40], large: [21,30], tycoon: [10000, 7000, 5000], classic: [10000, 5000] },
+      { price: 1100, small: null,     medium: [41,999],large: [31,40], tycoon: [11000, 7700, 5500], classic: [11000, 5500] },
+      { price: 1200, small: null,     medium: null,    large: [41,999],tycoon: [12000, 8200, 6000], classic: [12000, 6000] }
+    ];
+
+    // App State
+    let currentMode = 'tycoon'; // 'tycoon' or 'classic'
+    const hotelSizes = {
+      Sackson: 0, Tower: 0, American: 0, Festival: 0, Worldwide: 0, Continental: 0, Imperial: 0
+    };
+
+    // AI Modal Toggle
+    function toggleAiModal(show) {
+      const modal = document.getElementById('ai-modal');
+      if (!modal) return;
+      if (show) {
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    // Call Gemini API with Exponential Backoff
+    async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 3) {
+      let delay = 1000;
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            return await res.json();
+          }
+        } catch (err) {
+          if (i === maxRetries - 1) throw err;
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= 2;
+      }
+      throw new Error('Gemini API 呼び出しに失敗しました。');
+    }
+
+    // Format Markdown simple bold/bullet to HTML
+    function formatAiResponse(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-300 font-bold">$1</strong>')
+        .replace(/^\s*[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc">$1</li>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+    }
+
+    // Generate prompt with current game context
+    function getGameStateSummary() {
+      const isTycoon = (currentMode === 'tycoon');
+      let summary = `【アクワイア 盤面情報 (${isTycoon ? 'タイクーンモード' : 'クラシックモード'})】\n`;
+      HOTELS.forEach(h => {
+        const size = hotelSizes[h.id] || 0;
+        const fin = getFinancials(h.tier, size);
+        const isSafe = size >= 11;
+        summary += `- ${h.name} (${h.tier === 'small' ? '小' : h.tier === 'medium' ? '中' : '大'}): コマ数 ${size} | 株価: ${fin.price} | 筆頭配当: ${fin.b1} | 第2配当: ${fin.b2}${isTycoon ? ' | 第3配当: ' + fin.b3 : ''}${isSafe ? ' [大規模・安全]' : ''}\n`;
+      });
+      return summary;
+    }
+
+    async function queryGeminiAdvisor(userQuestion) {
+      const box = document.getElementById('ai-response-box');
+      const sendBtn = document.getElementById('ai-send-btn');
+      if (!box) return;
+
+      box.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-8 text-indigo-300 gap-2">
+          <i class="fa-solid fa-circle-notch fa-spin text-2xl"></i>
+          <span class="text-xs font-medium">Gemini AI が戦況を分析中...</span>
+        </div>
+      `;
+      if (sendBtn) sendBtn.disabled = true;
+
+      const systemPrompt = `あなたはボードゲーム「アクワイア (Acquire) 2023年版」のプロフェッショナルAI戦術アドバイザーです。
+プレイヤーが提示する現在の盤面情報（各ホテルのコマ数、株価、配当金、大規模/安全状態、モード）に基づき、以下の点について実践的で鋭い戦術助言を日本語で回答してください：
+1. 現在の盤面で最も投資効率（コスパ）が良い・狙い目のホテル株
+2. 併合（Merger）の危険性やチャンス、大規模（安全）化に向けた立ち回り
+3. 次の手番で意識すべき短期・中期的な方針
+
+要点をわかりやすく箇条書きや太字(**強調**)を交えて回答してください。長すぎず簡潔で読みやすい文章を心がけてください。`;
+
+      const contextState = getGameStateSummary();
+      const fullUserPrompt = `${contextState}\n【ユーザーの質問・指示】\n${userQuestion}`;
+
+      const apiKey = "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: fullUserPrompt }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+      };
+
+      try {
+        const result = await fetchGeminiWithBackoff(apiUrl, payload);
+        const candidateText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (candidateText) {
+          box.innerHTML = formatAiResponse(candidateText);
+        } else {
+          box.innerHTML = `<div class="text-rose-400 p-2">AIからの回答を取得できませんでした。再度お試しください。</div>`;
+        }
+      } catch (err) {
+        box.innerHTML = `<div class="text-rose-400 p-2">エラーが発生しました: ${err.message || '通信に失敗しました'}</div>`;
+      } finally {
+        if (sendBtn) sendBtn.disabled = false;
+      }
+    }
+
+    function runAiAnalysis(type) {
+      if (type === 'current') {
+        queryGeminiAdvisor("現在の全体盤面を分析し、最適な投資戦略と注意すべき併合リスクを教えてください。");
+      } else if (type === 'buy') {
+        queryGeminiAdvisor("現在の株価と配当金のバランスから、今一番購入すべきお得なホテル株トップ2とその理由を教えてください。");
+      } else if (type === 'merger') {
+        queryGeminiAdvisor("現在併合が起きそうなホテル、または安全化（11コマ以上）に近いホテルを分析し、併合対策や乗っ取り対策のアドバイスをお願いします。");
+      }
+    }
+
+    function handleAiSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('ai-custom-input');
+      if (!input || !input.value.trim()) return;
+      const q = input.value.trim();
+      input.value = '';
+      queryGeminiAdvisor(q);
+    }
+
+    // Modal toggle
+    function toggleModal(show) {
+      const modal = document.getElementById('board-modal');
+      if (!modal) return;
+      if (show) {
+        renderModalTable();
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function renderModalTable() {
+      const container = document.getElementById('modal-table-container');
+      const titleEl = document.getElementById('modal-title');
+      if (!container) return;
+
+      const isTycoon = (currentMode === 'tycoon');
+      if (titleEl) {
+        titleEl.textContent = `株価ボード [${isTycoon ? 'タイクーンモード' : 'クラシックモード'}]`;
+      }
+
+      let html = `
+        <table class="w-full text-center border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 text-[10px] text-slate-400">
+              <th class="py-1 px-0.5">小</th>
+              <th class="py-1 px-0.5">中</th>
+              <th class="py-1 px-0.5">大</th>
+              <th class="py-1 px-1 text-sky-300 bg-sky-950/40">株価</th>
+              <th class="py-1 px-1 text-amber-300">筆頭</th>
+              <th class="py-1 px-1 text-amber-300">第2</th>
+              ${isTycoon ? '<th class="py-1 px-1 text-amber-300">第3</th>' : ''}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 text-[11px]">
+      `;
+
+      EVAL_TABLE.forEach(row => {
+        const s = row.small ? (row.small[0] === row.small[1] ? row.small[0] : `${row.small[0]}-${row.small[1] === 999 ? '以上' : row.small[1]}`) : '—';
+        const m = row.medium ? (row.medium[0] === row.medium[1] ? row.medium[0] : `${row.medium[0]}-${row.medium[1] === 999 ? '以上' : row.medium[1]}`) : '—';
+        const l = row.large ? (row.large[0] === row.large[1] ? row.large[0] : `${row.large[0]}-${row.large[1] === 999 ? '以上' : row.large[1]}`) : '—';
+
+        const price = '$' + row.price;
+        const bonuses = isTycoon ? row.tycoon : row.classic;
+
+        html += `
+          <tr class="hover:bg-slate-800/40">
+            <td class="py-1.5 px-0.5 text-slate-400">${s}</td>
+            <td class="py-1.5 px-0.5 text-slate-400">${m}</td>
+            <td class="py-1.5 px-0.5 text-slate-400">${l}</td>
+            <td class="py-1.5 px-1 font-black text-sky-300 bg-sky-950/30">${price}</td>
+            <td class="py-1.5 px-1 font-bold text-amber-300">${'$' + bonuses[0].toLocaleString()}</td>
+            <td class="py-1.5 px-1 text-amber-300">${'$' + bonuses[1].toLocaleString()}</td>
+            ${isTycoon ? `<td class="py-1.5 px-1 text-amber-300">${'$' + bonuses[2].toLocaleString()}</td>` : ''}
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+        <div class="mt-2.5 text-[10px] text-slate-400 text-center font-sans">
+          ※ 小: Sackson, Tower | 中: American, Festival, Worldwide | 大: Continental, Imperial
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      const btnTycoon = document.getElementById('btn-tycoon');
+      const btnClassic = document.getElementById('btn-classic');
+
+      if (mode === 'tycoon') {
+        btnTycoon.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-100 bg-indigo-600 shadow-sm";
+        btnClassic.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-400 hover:text-slate-100";
+      } else {
+        btnClassic.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-100 bg-indigo-600 shadow-sm";
+        btnTycoon.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-400 hover:text-slate-100";
+      }
+      render();
+    }
+
+    function changeSize(id, delta) {
+      hotelSizes[id] = Math.max(0, (hotelSizes[id] || 0) + delta);
+      render();
+    }
+
+    function clearSize(id) {
+      hotelSizes[id] = 0;
+      render();
+    }
+
+    function onInputSize(id, val) {
+      const num = parseInt(val, 10);
+      hotelSizes[id] = isNaN(num) || num < 0 ? 0 : num;
+      render();
+    }
+
+    function getFinancials(tier, size) {
+      if (size < 2) {
+        return { price: '-', b1: '-', b2: '-', b3: '-' };
+      }
+
+      for (const row of EVAL_TABLE) {
+        const range = row[tier];
+        if (range && size >= range[0] && size <= range[1]) {
+          const priceStr = '$' + row.price;
+          if (currentMode === 'tycoon') {
+            return {
+              price: priceStr,
+              b1: '$' + row.tycoon[0].toLocaleString(),
+              b2: '$' + row.tycoon[1].toLocaleString(),
+              b3: '$' + row.tycoon[2].toLocaleString()
+            };
+          } else {
+            return {
+              price: priceStr,
+              b1: '$' + row.classic[0].toLocaleString(),
+              b2: '$' + row.classic[1].toLocaleString(),
+              b3: '-'
+            };
+          }
+        }
+      }
+      return { price: '-', b1: '-', b2: '-', b3: '-' };
+    }
+
+    function render() {
+      const container = document.getElementById('hotel-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const isTycoon = (currentMode === 'tycoon');
+
+      HOTELS.forEach((hotel) => {
+        const size = hotelSizes[hotel.id] || 0;
+        const isSafe = size >= 11;
+        const fin = getFinancials(hotel.tier, size);
+
+        const fmtPrice = fin.price;
+        const fmtB1 = fin.b1;
+        const fmtB2 = fin.b2;
+        const fmtB3 = fin.b3;
+
+        // Financial block grid html based on mode
+        let statsGridHtml = '';
+        if (isTycoon) {
+          statsGridHtml = `
+            <div class="flex items-center gap-1.5 font-mono text-center">
+              <!-- グループ1: 株価 -->
+              <div class="w-1/4 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
+                <span class="text-[9px] text-slate-400 font-sans font-medium">株価</span>
+                <span class="font-black text-sky-300 text-sm sm:text-base">${fmtPrice}</span>
+              </div>
+              <!-- グループ2: 配当金 (筆頭 / 第2 / 第3) -->
+              <div class="w-3/4 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-3 divide-x divide-slate-800/80">
+                <div class="flex flex-col">
+                  <span class="text-[9px] text-slate-400 font-sans font-medium">筆頭</span>
+                  <span class="font-black text-amber-300 text-sm sm:text-base">${fmtB1}</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[9px] text-slate-400 font-sans font-medium">第2</span>
+                  <span class="font-black text-amber-300 text-sm sm:text-base">${fmtB2}</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[9px] text-slate-400 font-sans font-medium">第3</span>
+                  <span class="font-black text-amber-300 text-sm sm:text-base">${fmtB3}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          statsGridHtml = `
+            <div class="flex items-center gap-1.5 font-mono text-center">
+              <!-- グループ1: 株価 -->
+              <div class="w-1/3 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
+                <span class="text-[9px] text-slate-400 font-sans font-medium">株価</span>
+                <span class="font-black text-sky-300 text-base sm:text-lg">${fmtPrice}</span>
+              </div>
+              <!-- グループ2: 配当金 (筆頭 / 第2) -->
+              <div class="w-2/3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-2 divide-x divide-slate-800/80">
+                <div class="flex flex-col">
+                  <span class="text-[9px] text-slate-400 font-sans font-medium">筆頭</span>
+                  <span class="font-black text-amber-300 text-base sm:text-lg">${fmtB1}</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[9px] text-slate-400 font-sans font-medium">第2</span>
+                  <span class="font-black text-amber-300 text-base sm:text-lg">${fmtB2}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        const amountFontSize = isTycoon ? 'text-sm sm:text-base' : 'text-base sm:text-lg';
+
+        const cardHtml = `
+          <div class="border-l-4 ${hotel.border} bg-slate-900/60 hover:bg-slate-900/90 p-2 sm:p-2.5 rounded-r-lg transition">
+            
+            <!-- Row 1: Hotel Info & Counter Controls -->
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              
+              <!-- Hotel Name + Current Size Display + Badges -->
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="font-black text-base sm:text-lg ${hotel.textColor} truncate">${hotel.name}</span>
+                
+                <!-- Current Size Display / Manual Input (Adjacent to Hotel Name) -->
+                <input type="number" value="${size}" oninput="onInputSize('${hotel.id}', this.value)" 
+                  class="w-10 h-8 bg-slate-950 text-center font-mono font-bold ${amountFontSize} text-slate-100 rounded-md border border-slate-700 focus:outline-none focus:border-slate-500 shrink-0">
+
+                ${isSafe ? '<span class="text-[10px] px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300 font-mono shrink-0 font-medium">大規模</span>' : ''}
+              </div>
+
+              <!-- Counter Controls (Action Buttons Only) -->
+              <div class="flex items-center gap-1 shrink-0">
+                <!-- Clear / Reset -->
+                <button onclick="clearSize('${hotel.id}')" title="0にリセット"
+                  class="w-7 h-8 text-slate-400 active:text-rose-400 bg-slate-800/50 active:bg-slate-700 rounded-md text-xs flex items-center justify-center transition border border-slate-700/50 active:scale-95 mr-1">
+                  <i class="fa-solid fa-rotate-left"></i>
+                </button>
+
+                <!-- Minus 1 -->
+                <button onclick="changeSize('${hotel.id}', -1)" title="1減らす"
+                  class="w-11 h-8 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 rounded-md font-extrabold text-xs flex items-center justify-center transition border border-slate-700 active:scale-95">
+                  -
+                </button>
+
+                <!-- Plus 1 -->
+                <button onclick="changeSize('${hotel.id}', 1)" title="1増やす"
+                  class="w-11 h-8 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-slate-100 rounded-md font-extrabold text-xs flex items-center justify-center transition shadow-md shadow-emerald-950/50 active:scale-95 border border-emerald-500/30">
+                  +
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Row 2: Financial Stats Block Grid -->
+            ${statsGridHtml}
+
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', cardHtml);
+      });
+    }
+
+    // Initialize on DOM load
+    window.addEventListener('DOMContentLoaded', () => {
+      render();
+    });
+  </script>
+</body>
+</html>
