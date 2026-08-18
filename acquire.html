@@ -525,7 +525,8 @@
           const cardHtml = `
             <div class="border-l-4 ${hotel.border} bg-slate-900/90 hover:bg-slate-900 p-2.5 sm:p-3 rounded-r-2xl border-y border-r border-slate-800/80 transition-all duration-200 shadow-md">
               <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-2 min-w-0">
+                <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                  <i class="fa-solid fa-hotel ${hotel.textColor} text-xs sm:text-sm shrink-0"></i>
                   <span class="font-bold text-base sm:text-lg ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
                   <input type="number" value="${size}" oninput="onInputSize('${hotel.id}', this.value)" 
                     class="w-10 h-7 bg-slate-950 text-center font-mono font-bold text-xs sm:text-sm text-slate-100 rounded-lg border border-slate-700/80 focus:outline-none focus:border-indigo-500 shrink-0">
@@ -557,7 +558,10 @@
           const buttonHtml = `
             <button onclick="establishHotel('${hotel.id}')" 
               class="border-l-4 ${hotel.border} bg-slate-900/90 hover:bg-slate-800/90 border-t border-r border-b border-slate-800 rounded-r-xl p-2 flex items-center justify-between text-left transition active:scale-95 group shadow-sm ${hotel.bgTint}">
-              <span class="font-semibold text-xs sm:text-sm ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
+              <div class="flex items-center gap-1.5 min-w-0">
+                <i class="fa-solid fa-hotel ${hotel.textColor} text-xs shrink-0"></i>
+                <span class="font-semibold text-xs sm:text-sm ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
+              </div>
               <span class="text-[10px] bg-slate-800/80 text-slate-300 font-semibold px-1.5 py-0.5 rounded-lg border border-slate-700/80 shrink-0 group-hover:bg-slate-700 transition">
                 + 設立
               </span>
