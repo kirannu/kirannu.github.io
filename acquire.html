@@ -15,7 +15,7 @@
     }
     /* Prevent iOS Safari auto-zoom on input focus */
     input[type=number] {
-      font-size: 16px;
+      font-size: 16px !important;
       -moz-appearance: textfield;
     }
     /* Hide spin buttons for chrome, safari, edge, firefox */
@@ -26,51 +26,53 @@
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col justify-between p-2 sm:p-4 selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col justify-between p-2.5 sm:p-4 selection:bg-indigo-500 selection:text-white">
 
-  <header class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2 sm:mb-3 shrink-0">
+  <!-- Header Surface -->
+  <header class="flex items-center justify-between border-b border-slate-800/80 pb-2.5 mb-2.5 sm:mb-3 shrink-0">
     <div class="flex items-center gap-2">
-      <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-100 flex items-center gap-1.5">
+      <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
         <i class="fa-solid fa-chart-line text-amber-400"></i>
-        <span>ACQUIRE <span class="text-xs text-amber-400/90 font-mono font-normal">2023</span></span>
+        <span>ACQUIRE <span class="text-xs text-amber-400/90 font-mono font-medium">2023</span></span>
       </h1>
     </div>
 
-    <div class="flex items-center gap-1.5">
-      <!-- Compact Segmented Mode Switcher -->
-      <div class="bg-slate-900 p-0.5 rounded-lg border border-slate-800 flex items-center text-xs">
+    <div class="flex items-center gap-2">
+      <!-- Segmented Mode Switcher Token -->
+      <div class="bg-slate-900/90 p-1 rounded-xl border border-slate-800 flex items-center text-xs shadow-inner">
         <button id="btn-tycoon" onclick="setMode('tycoon')" 
-          class="px-2.5 py-1 rounded-md font-medium transition text-slate-100 bg-indigo-600 shadow-sm">
+          class="px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm">
           タイクーン
         </button>
         <button id="btn-classic" onclick="setMode('classic')" 
-          class="px-2.5 py-1 rounded-md font-medium transition text-slate-400 hover:text-slate-100">
+          class="px-3 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200">
           クラシック
         </button>
       </div>
 
-      <!-- 株価ボード確認ボタン (アイコンのみ・最右端) -->
+      <!-- Action Button Token -->
       <button onclick="toggleModal(true)" 
-        class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-800 rounded-lg text-xs flex items-center justify-center transition shrink-0 active:scale-95"
+        class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 border border-slate-800 rounded-xl text-xs flex items-center justify-center transition shrink-0 active:scale-95 shadow-sm"
         title="株価ボード（元情報）を開く"
         aria-label="株価ボードを開く">
-        <i class="fa-solid fa-table text-slate-400"></i>
+        <i class="fa-solid fa-table"></i>
       </button>
     </div>
   </header>
 
+  <!-- Main Content Scroll Area -->
   <main class="flex-1 flex flex-col justify-between overflow-y-auto pr-0.5 pb-2 sm:pb-3 gap-3">
     <!-- Active Hotel Cards Container -->
-    <div id="active-hotels" class="space-y-1.5 sm:space-y-2">
+    <div id="active-hotels" class="space-y-2 sm:space-y-2.5">
       <!-- Active Hotel Cards dynamically rendered here -->
     </div>
 
-    <!-- Unestablished Hotels Section -->
-    <div id="unestablished-section" class="bg-slate-900/50 border border-slate-800 rounded-xl p-2.5 sm:p-3 mt-auto shrink-0">
+    <!-- Unestablished Hotels Surface -->
+    <div id="unestablished-section" class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-2.5 sm:p-3 mt-auto shrink-0 backdrop-blur-sm">
       <div class="text-[11px] text-slate-400 mb-2 font-medium flex items-center justify-between">
         <span class="flex items-center gap-1.5">
           <i class="fa-solid fa-building text-slate-400"></i>
-          <span>未設立のホテル</span>
+          <span class="tracking-wide">未設立のホテル</span>
         </span>
         <span class="text-[10px] text-slate-400 font-mono">タップで設立 (2コマ)</span>
       </div>
@@ -81,62 +83,62 @@
   </main>
 
   <!-- 株価ボード (2023年版) モーダル -->
-  <div id="board-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleModal(false)">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+  <div id="board-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleModal(false)">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- モーダルヘッダー -->
-      <div class="p-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+      <div class="p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
         <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-table text-slate-400"></i>
+          <i class="fa-solid fa-table text-amber-400"></i>
           <span id="modal-title">株価ボード（2023年版）</span>
         </h2>
-        <button onclick="toggleModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-md text-xs flex items-center justify-center transition">
+        <button onclick="toggleModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs flex items-center justify-center transition active:scale-95">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <!-- モーダル本文 (テーブル) -->
-      <div class="p-2 sm:p-3 overflow-y-auto flex-1 font-mono" id="modal-table-container">
+      <div class="p-2.5 sm:p-3 overflow-y-auto flex-1 font-mono text-xs" id="modal-table-container">
         <!-- JSでモードに応じてテーブルを描画 -->
       </div>
     </div>
   </div>
 
   <!-- AI 戦術参謀 モーダル -->
-  <div id="ai-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleAiModal(false)">
-    <div class="bg-slate-900 border border-indigo-900/80 rounded-xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+  <div id="ai-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleAiModal(false)">
+    <div class="bg-slate-900 border border-indigo-900/60 rounded-2xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- モーダルヘッダー -->
-      <div class="p-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+      <div class="p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
         <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
           <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
           <span>AI戦術参謀 (Gemini)</span>
         </h2>
-        <button onclick="toggleAiModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-md text-xs flex items-center justify-center transition">
+        <button onclick="toggleAiModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs flex items-center justify-center transition active:scale-95">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <!-- モーダル内容 -->
-      <div class="p-3 overflow-y-auto flex-1 space-y-3 font-sans text-xs">
+      <div class="p-3.5 overflow-y-auto flex-1 space-y-3 font-sans text-xs">
         <!-- クイックアクションボタン -->
         <div class="space-y-1.5">
           <div class="text-[10px] text-slate-400 font-medium">クイックAI診断</div>
           <div class="flex flex-wrap gap-1.5">
-            <button onclick="runAiAnalysis('current')" class="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold flex items-center gap-1 transition shadow-sm active:scale-95">
+            <button onclick="runAiAnalysis('current')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold flex items-center gap-1.5 transition shadow-sm active:scale-95">
               <i class="fa-solid fa-chart-line text-indigo-200"></i>
               <span>現在の戦況を全体診断</span>
             </button>
-            <button onclick="runAiAnalysis('buy')" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
+            <button onclick="runAiAnalysis('buy')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
               💡 狙い目の購入株
             </button>
-            <button onclick="runAiAnalysis('merger')" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
+            <button onclick="runAiAnalysis('merger')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
               🔀 併合・安全化対策
             </button>
           </div>
         </div>
 
         <!-- AI 回答表示エリア -->
-        <div id="ai-response-box" class="bg-slate-950 border border-slate-800 rounded-lg p-3 min-h-[140px] text-slate-200 leading-relaxed overflow-y-auto max-h-[300px]">
+        <div id="ai-response-box" class="bg-slate-950 border border-slate-800 rounded-xl p-3 min-h-[140px] text-slate-200 leading-relaxed overflow-y-auto max-h-[300px]">
           <div class="text-slate-400 text-center py-8">
-            <i class="fa-solid fa-robot text-2xl mb-2 text-indigo-400/60"></i>
+            <i class="fa-solid fa-robot text-2xl mb-2 text-indigo-400/80"></i>
             <p>「現在の戦況を全体診断」または質問を入力してください。<br>盤面のホテルコマ数や株価から最適戦略をアドバイスします。</p>
           </div>
         </div>
@@ -144,8 +146,8 @@
         <!-- カスタム質問入力フォーム -->
         <form onsubmit="handleAiSubmit(event)" class="flex gap-1.5 pt-1 border-t border-slate-800">
           <input type="text" id="ai-custom-input" placeholder="例: サクソンとタワーが併合しそうだがどちらの株を買うべき？" 
-            class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
-          <button type="submit" id="ai-send-btn" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg text-xs flex items-center gap-1 transition shrink-0 active:scale-95">
+            class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+          <button type="submit" id="ai-send-btn" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs flex items-center gap-1 transition shrink-0 active:scale-95">
             <i class="fa-solid fa-paper-plane"></i>
           </button>
         </form>
@@ -154,15 +156,15 @@
   </div>
 
   <script>
-    // 7 Hotels Definition with Exact Visual Brand Colors
+    // 7 Hotels Definition with High-Contrast Accessible Visual Brand Colors
     const HOTELS = [
-      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  border: 'border-l-red-500',    textColor: 'text-red-400' },
-      { id: 'Tower',       name: 'Tower',       tier: 'small',  border: 'border-l-amber-400',  textColor: 'text-amber-300' },
-      { id: 'American',    name: 'American',    tier: 'medium', border: 'border-l-blue-500',   textColor: 'text-blue-400' },
-      { id: 'Festival',    name: 'Festival',    tier: 'medium', border: 'border-l-emerald-500', textColor: 'text-emerald-400' },
-      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', border: 'border-l-purple-500', textColor: 'text-purple-400' },
-      { id: 'Continental', name: 'Continental', tier: 'large',  border: 'border-l-cyan-400',   textColor: 'text-cyan-300' },
-      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  border: 'border-l-orange-500', textColor: 'text-orange-400' }
+      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  border: 'border-l-rose-500',   textColor: 'text-rose-400',   bgTint: 'hover:border-rose-500/50' },
+      { id: 'Tower',       name: 'Tower',       tier: 'small',  border: 'border-l-amber-400',  textColor: 'text-amber-300',  bgTint: 'hover:border-amber-400/50' },
+      { id: 'American',    name: 'American',    tier: 'medium', border: 'border-l-sky-400',    textColor: 'text-sky-300',    bgTint: 'hover:border-sky-400/50' },
+      { id: 'Festival',    name: 'Festival',    tier: 'medium', border: 'border-l-emerald-400',textColor: 'text-emerald-300',bgTint: 'hover:border-emerald-400/50' },
+      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', border: 'border-l-purple-400', textColor: 'text-purple-300', bgTint: 'hover:border-purple-400/50' },
+      { id: 'Continental', name: 'Continental', tier: 'large',  border: 'border-l-cyan-400',   textColor: 'text-cyan-300',   bgTint: 'hover:border-cyan-400/50' },
+      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  border: 'border-l-orange-400', textColor: 'text-orange-300', bgTint: 'hover:border-orange-400/50' }
     ];
 
     // Master Evaluation Table (2023 Rules)
@@ -197,7 +199,6 @@
       }
     }
 
-    // Call Gemini API with Exponential Backoff
     async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 3) {
       let delay = 1000;
       for (let i = 0; i < maxRetries; i++) {
@@ -219,7 +220,6 @@
       throw new Error('Gemini API 呼び出しに失敗しました。');
     }
 
-    // Format Markdown simple bold/bullet to HTML
     function formatAiResponse(text) {
       if (!text) return '';
       return text
@@ -232,7 +232,6 @@
         .replace(/\n/g, '<br>');
     }
 
-    // Generate prompt with current game context
     function getGameStateSummary() {
       const isTycoon = (currentMode === 'tycoon');
       let summary = `【アクワイア 盤面情報 (${isTycoon ? 'タイクーンモード' : 'クラシックモード'})】\n`;
@@ -337,14 +336,14 @@
       let html = `
         <table class="w-full text-center border-collapse">
           <thead>
-            <tr class="border-b border-slate-800 text-[10px] text-slate-400">
-              <th class="py-1 px-0.5">小</th>
-              <th class="py-1 px-0.5">中</th>
-              <th class="py-1 px-0.5">大</th>
-              <th class="py-1 px-1 text-sky-300 bg-sky-950/40">株価</th>
-              <th class="py-1 px-1 text-amber-300">筆頭</th>
-              <th class="py-1 px-1 text-amber-300">第2</th>
-              ${isTycoon ? '<th class="py-1 px-1 text-amber-300">第3</th>' : ''}
+            <tr class="border-b border-slate-800 text-[10px] text-slate-400 tracking-wider">
+              <th class="py-1.5 px-0.5">小</th>
+              <th class="py-1.5 px-0.5">中</th>
+              <th class="py-1.5 px-0.5">大</th>
+              <th class="py-1.5 px-1 text-amber-300 bg-amber-500/10 border-x border-amber-500/20 font-bold">株価</th>
+              <th class="py-1.5 px-1 text-slate-300">筆頭</th>
+              <th class="py-1.5 px-1 text-slate-300">第2</th>
+              ${isTycoon ? '<th class="py-1.5 px-1 text-slate-300">第3</th>' : ''}
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-800/60 text-[11px]">
@@ -359,14 +358,14 @@
         const bonuses = isTycoon ? row.tycoon : row.classic;
 
         html += `
-          <tr class="hover:bg-slate-800/40">
-            <td class="py-1.5 px-0.5 text-slate-400">${s}</td>
-            <td class="py-1.5 px-0.5 text-slate-400">${m}</td>
-            <td class="py-1.5 px-0.5 text-slate-400">${l}</td>
-            <td class="py-1.5 px-1 font-black text-sky-300 bg-sky-950/30">${price}</td>
-            <td class="py-1.5 px-1 font-bold text-amber-300">${'$' + bonuses[0].toLocaleString()}</td>
-            <td class="py-1.5 px-1 text-amber-300">${'$' + bonuses[1].toLocaleString()}</td>
-            ${isTycoon ? `<td class="py-1.5 px-1 text-amber-300">${'$' + bonuses[2].toLocaleString()}</td>` : ''}
+          <tr class="hover:bg-slate-800/30 transition">
+            <td class="py-1.5 px-0.5 text-slate-400 font-mono">${s}</td>
+            <td class="py-1.5 px-0.5 text-slate-400 font-mono">${m}</td>
+            <td class="py-1.5 px-0.5 text-slate-400 font-mono">${l}</td>
+            <td class="py-1.5 px-1 font-bold text-amber-300 bg-amber-500/10 border-x border-amber-500/20">${price}</td>
+            <td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[0].toLocaleString()}</td>
+            <td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[1].toLocaleString()}</td>
+            ${isTycoon ? `<td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[2].toLocaleString()}</td>` : ''}
           </tr>
         `;
       });
@@ -374,7 +373,7 @@
       html += `
           </tbody>
         </table>
-        <div class="mt-2.5 text-[10px] text-slate-400 text-center font-sans">
+        <div class="mt-3 text-[10px] text-slate-400 text-center font-sans tracking-wide">
           ※ 小: Sackson, Tower | 中: American, Festival, Worldwide | 大: Continental, Imperial
         </div>
       `;
@@ -388,11 +387,11 @@
       const btnClassic = document.getElementById('btn-classic');
 
       if (mode === 'tycoon') {
-        btnTycoon.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-100 bg-indigo-600 shadow-sm";
-        btnClassic.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-400 hover:text-slate-100";
+        btnTycoon.className = "px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm";
+        btnClassic.className = "px-3 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200";
       } else {
-        btnClassic.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-100 bg-indigo-600 shadow-sm";
-        btnTycoon.className = "px-2.5 py-1 rounded-md font-medium transition text-slate-400 hover:text-slate-100";
+        btnClassic.className = "px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm";
+        btnTycoon.className = "px-3 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200";
       }
       render();
     }
@@ -477,42 +476,46 @@
           let statsGridHtml = '';
           if (isTycoon) {
             statsGridHtml = `
-              <div class="flex items-center gap-1.5 font-mono text-center">
-                <div class="w-1/3 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
-                  <span class="text-[9px] text-slate-400 font-sans font-medium">株価</span>
-                  <span class="font-black text-sky-300 text-lg sm:text-xl">${fmtPrice}</span>
+              <div class="flex items-stretch gap-1.5 font-mono text-center">
+                <!-- Stock Price Primary Focus Token -->
+                <div class="w-1/3 bg-amber-500/10 border border-amber-500/30 rounded-xl p-1 flex flex-col justify-center shadow-inner">
+                  <span class="text-[10px] text-slate-400 font-sans font-medium tracking-tight">株価</span>
+                  <span class="font-bold text-amber-300 text-sm sm:text-base leading-snug">${fmtPrice}</span>
                 </div>
-                <div class="w-2/3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-3 divide-x divide-slate-800/80">
+                <!-- Bonuses Secondary Token -->
+                <div class="w-2/3 bg-slate-950/80 border border-slate-800 rounded-xl p-1 grid grid-cols-3 divide-x divide-slate-800/80 shadow-inner">
                   <div class="flex flex-col justify-center">
-                    <span class="text-[9px] text-slate-400 font-sans font-medium">筆頭</span>
-                    <span class="text-amber-300/90 text-xs sm:text-sm">${fmtB1}</span>
+                    <span class="text-[10px] text-slate-400 font-sans font-medium">筆頭</span>
+                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB1}</span>
                   </div>
                   <div class="flex flex-col justify-center">
-                    <span class="text-[9px] text-slate-400 font-sans font-medium">第2</span>
-                    <span class="text-amber-300/90 text-xs sm:text-sm">${fmtB2}</span>
+                    <span class="text-[10px] text-slate-400 font-sans font-medium">第2</span>
+                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB2}</span>
                   </div>
                   <div class="flex flex-col justify-center">
-                    <span class="text-[9px] text-slate-400 font-sans font-medium">第3</span>
-                    <span class="text-amber-300/90 text-xs sm:text-sm">${fmtB3}</span>
+                    <span class="text-[10px] text-slate-400 font-sans font-medium">第3</span>
+                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB3}</span>
                   </div>
                 </div>
               </div>
             `;
           } else {
             statsGridHtml = `
-              <div class="flex items-center gap-1.5 font-mono text-center">
-                <div class="w-1/3 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
-                  <span class="text-[9px] text-slate-400 font-sans font-medium">株価</span>
-                  <span class="font-black text-sky-300 text-xl sm:text-2xl">${fmtPrice}</span>
+              <div class="flex items-stretch gap-1.5 font-mono text-center">
+                <!-- Stock Price Primary Focus Token -->
+                <div class="w-1/3 bg-amber-500/10 border border-amber-500/30 rounded-xl p-1 flex flex-col justify-center shadow-inner">
+                  <span class="text-[10px] text-slate-400 font-sans font-medium tracking-tight">株価</span>
+                  <span class="font-bold text-amber-300 text-sm sm:text-base leading-snug">${fmtPrice}</span>
                 </div>
-                <div class="w-2/3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-2 divide-x divide-slate-800/80">
+                <!-- Bonuses Secondary Token -->
+                <div class="w-2/3 bg-slate-950/80 border border-slate-800 rounded-xl p-1 grid grid-cols-2 divide-x divide-slate-800/80 shadow-inner">
                   <div class="flex flex-col justify-center">
-                    <span class="text-[9px] text-slate-400 font-sans font-medium">筆頭</span>
-                    <span class="text-amber-300/90 text-sm sm:text-base">${fmtB1}</span>
+                    <span class="text-[10px] text-slate-400 font-sans font-medium">筆頭</span>
+                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB1}</span>
                   </div>
                   <div class="flex flex-col justify-center">
-                    <span class="text-[9px] text-slate-400 font-sans font-medium">第2</span>
-                    <span class="text-amber-300/90 text-sm sm:text-base">${fmtB2}</span>
+                    <span class="text-[10px] text-slate-400 font-sans font-medium">第2</span>
+                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB2}</span>
                   </div>
                 </div>
               </div>
@@ -520,25 +523,26 @@
           }
 
           const cardHtml = `
-            <div class="border-l-4 ${hotel.border} bg-slate-900/80 hover:bg-slate-900 p-2 sm:p-2.5 rounded-r-lg transition-all duration-200">
-              <div class="flex items-center justify-between gap-2 mb-1.5">
+            <div class="border-l-4 ${hotel.border} bg-slate-900/90 hover:bg-slate-900 p-2.5 sm:p-3 rounded-r-2xl border-y border-r border-slate-800/80 transition-all duration-200 shadow-md">
+              <div class="flex items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-2 min-w-0">
-                  <span class="font-black text-base sm:text-lg ${hotel.textColor} truncate">${hotel.name}</span>
+                  <span class="font-bold text-base sm:text-lg ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
                   <input type="number" value="${size}" oninput="onInputSize('${hotel.id}', this.value)" 
-                    class="w-9 h-7 bg-slate-950 text-center font-mono text-xs sm:text-sm text-slate-200 rounded border border-slate-800 focus:outline-none focus:border-slate-600 shrink-0">
-                  ${isSafe ? '<span class="text-[10px] px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300 font-mono shrink-0 font-medium">大規模</span>' : ''}
+                    class="w-10 h-7 bg-slate-950 text-center font-mono font-bold text-xs sm:text-sm text-slate-100 rounded-lg border border-slate-700/80 focus:outline-none focus:border-indigo-500 shrink-0">
+                  ${isSafe ? '<span class="text-[10px] px-2 py-0.5 rounded-full border border-slate-700 bg-slate-800/80 text-slate-300 font-mono shrink-0 font-medium tracking-wide">大規模</span>' : ''}
                 </div>
+                <!-- Action Controls Block -->
                 <div class="flex items-center gap-1 shrink-0">
                   <button onclick="clearSize('${hotel.id}')" title="解散・リセット"
-                    class="w-7 h-8 text-slate-400 active:text-rose-400 bg-slate-800/50 active:bg-slate-700 rounded-md text-xs flex items-center justify-center transition border border-slate-700/50 active:scale-95 mr-1">
+                    class="w-7 h-8 text-slate-400 hover:text-rose-400 active:text-rose-400 bg-slate-800/40 hover:bg-rose-500/20 rounded-lg text-xs flex items-center justify-center transition border border-slate-700/50 active:scale-95 mr-1">
                     <i class="fa-solid fa-rotate-left"></i>
                   </button>
                   <button onclick="changeSize('${hotel.id}', -1)" title="1減らす"
-                    class="w-11 h-8 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 rounded-md font-extrabold text-xs flex items-center justify-center transition border border-slate-700 active:scale-95">
+                    class="w-11 h-8 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 rounded-lg font-bold text-xs flex items-center justify-center transition border border-slate-700/80 active:scale-95 shadow-sm">
                     -
                   </button>
                   <button onclick="changeSize('${hotel.id}', 1)" title="1増やす"
-                    class="w-11 h-8 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-slate-100 rounded-md font-extrabold text-xs flex items-center justify-center transition shadow-md shadow-emerald-950/50 active:scale-95 border border-emerald-500/30">
+                    class="w-11 h-8 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-lg font-bold text-xs flex items-center justify-center transition shadow-md shadow-emerald-950/40 active:scale-95 border border-emerald-500/40">
                     +
                   </button>
                 </div>
@@ -548,13 +552,13 @@
           `;
           activeContainer.insertAdjacentHTML('beforeend', cardHtml);
         } else {
-          // UNESTABLISHED HOTEL (COMPACT BUTTON DISPLAY)
+          // UNESTABLISHED HOTEL (COMPACT BUTTON DISPLAY TOKEN)
           unestablishedCount++;
           const buttonHtml = `
             <button onclick="establishHotel('${hotel.id}')" 
-              class="border-l-4 ${hotel.border} bg-slate-900 hover:bg-slate-800 active:bg-slate-800/80 border-t border-r border-b border-slate-800 rounded-r-lg p-2 flex items-center justify-between text-left transition active:scale-95 group shadow-sm">
-              <span class="font-bold text-xs sm:text-sm ${hotel.textColor} truncate">${hotel.name}</span>
-              <span class="text-[10px] bg-slate-800 text-slate-300 font-bold px-1.5 py-0.5 rounded border border-slate-700/60 shrink-0 group-hover:bg-slate-700 transition">
+              class="border-l-4 ${hotel.border} bg-slate-900/90 hover:bg-slate-800/90 border-t border-r border-b border-slate-800 rounded-r-xl p-2 flex items-center justify-between text-left transition active:scale-95 group shadow-sm ${hotel.bgTint}">
+              <span class="font-semibold text-xs sm:text-sm ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
+              <span class="text-[10px] bg-slate-800/80 text-slate-300 font-semibold px-1.5 py-0.5 rounded-lg border border-slate-700/80 shrink-0 group-hover:bg-slate-700 transition">
                 + 設立
               </span>
             </button>
@@ -566,7 +570,7 @@
       // Show placeholder if no active hotels
       if (activeCount === 0) {
         activeContainer.innerHTML = `
-          <div class="text-center py-8 text-slate-400 text-xs border border-dashed border-slate-800/80 rounded-xl bg-slate-900/20">
+          <div class="text-center py-10 text-slate-400 text-xs border border-dashed border-slate-800/80 rounded-2xl bg-slate-900/30">
             <i class="fa-solid fa-building-circle-arrow-right text-2xl mb-2 text-slate-400"></i>
             <p class="font-medium text-slate-300">現在、設立済みのホテルはありません</p>
             <p class="text-[10px] text-slate-400 mt-1">下の「未設立のホテル」ボタンをタップして設立してください</p>
