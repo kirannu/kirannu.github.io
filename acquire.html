@@ -478,22 +478,22 @@
           if (isTycoon) {
             statsGridHtml = `
               <div class="flex items-center gap-1.5 font-mono text-center">
-                <div class="w-1/4 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
+                <div class="w-1/3 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
                   <span class="text-[9px] text-slate-400 font-sans font-medium">株価</span>
-                  <span class="font-black text-sky-300 text-sm sm:text-base">${fmtPrice}</span>
+                  <span class="font-black text-sky-300 text-lg sm:text-xl">${fmtPrice}</span>
                 </div>
-                <div class="w-3/4 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-3 divide-x divide-slate-800/80">
-                  <div class="flex flex-col">
+                <div class="w-2/3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-3 divide-x divide-slate-800/80">
+                  <div class="flex flex-col justify-center">
                     <span class="text-[9px] text-slate-400 font-sans font-medium">筆頭</span>
-                    <span class="font-black text-amber-300 text-sm sm:text-base">${fmtB1}</span>
+                    <span class="text-amber-300/90 text-xs sm:text-sm">${fmtB1}</span>
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col justify-center">
                     <span class="text-[9px] text-slate-400 font-sans font-medium">第2</span>
-                    <span class="font-black text-amber-300 text-sm sm:text-base">${fmtB2}</span>
+                    <span class="text-amber-300/90 text-xs sm:text-sm">${fmtB2}</span>
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col justify-center">
                     <span class="text-[9px] text-slate-400 font-sans font-medium">第3</span>
-                    <span class="font-black text-amber-300 text-sm sm:text-base">${fmtB3}</span>
+                    <span class="text-amber-300/90 text-xs sm:text-sm">${fmtB3}</span>
                   </div>
                 </div>
               </div>
@@ -503,23 +503,21 @@
               <div class="flex items-center gap-1.5 font-mono text-center">
                 <div class="w-1/3 bg-sky-950/40 border border-sky-800/50 rounded-lg p-1 flex flex-col justify-center">
                   <span class="text-[9px] text-slate-400 font-sans font-medium">株価</span>
-                  <span class="font-black text-sky-300 text-base sm:text-lg">${fmtPrice}</span>
+                  <span class="font-black text-sky-300 text-xl sm:text-2xl">${fmtPrice}</span>
                 </div>
                 <div class="w-2/3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-1 grid grid-cols-2 divide-x divide-slate-800/80">
-                  <div class="flex flex-col">
+                  <div class="flex flex-col justify-center">
                     <span class="text-[9px] text-slate-400 font-sans font-medium">筆頭</span>
-                    <span class="font-black text-amber-300 text-base sm:text-lg">${fmtB1}</span>
+                    <span class="text-amber-300/90 text-sm sm:text-base">${fmtB1}</span>
                   </div>
-                  <div class="flex flex-col">
+                  <div class="flex flex-col justify-center">
                     <span class="text-[9px] text-slate-400 font-sans font-medium">第2</span>
-                    <span class="font-black text-amber-300 text-base sm:text-lg">${fmtB2}</span>
+                    <span class="text-amber-300/90 text-sm sm:text-base">${fmtB2}</span>
                   </div>
                 </div>
               </div>
             `;
           }
-
-          const amountFontSize = isTycoon ? 'text-sm sm:text-base' : 'text-base sm:text-lg';
 
           const cardHtml = `
             <div class="border-l-4 ${hotel.border} bg-slate-900/80 hover:bg-slate-900 p-2 sm:p-2.5 rounded-r-lg transition-all duration-200">
@@ -527,7 +525,7 @@
                 <div class="flex items-center gap-2 min-w-0">
                   <span class="font-black text-base sm:text-lg ${hotel.textColor} truncate">${hotel.name}</span>
                   <input type="number" value="${size}" oninput="onInputSize('${hotel.id}', this.value)" 
-                    class="w-10 h-8 bg-slate-950 text-center font-mono font-bold ${amountFontSize} text-slate-100 rounded-md border border-slate-700 focus:outline-none focus:border-slate-500 shrink-0">
+                    class="w-9 h-7 bg-slate-950 text-center font-mono text-xs sm:text-sm text-slate-200 rounded border border-slate-800 focus:outline-none focus:border-slate-600 shrink-0">
                   ${isSafe ? '<span class="text-[10px] px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-300 font-mono shrink-0 font-medium">大規模</span>' : ''}
                 </div>
                 <div class="flex items-center gap-1 shrink-0">
