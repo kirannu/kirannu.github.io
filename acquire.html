@@ -2,24 +2,27 @@
 <html lang="ja" class="dark h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Acquire 2023 Calculator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Prevent text selection during fast tapping */
-    button, input {
+    /* Prevent double-tap zoom and text selection during fast tapping */
+    html, body, button, input {
+      touch-action: manipulation;
       user-select: none;
       -webkit-user-select: none;
+    }
+    /* Prevent iOS Safari auto-zoom on input focus */
+    input[type=number] {
+      font-size: 16px;
+      -moz-appearance: textfield;
     }
     /* Hide spin buttons for chrome, safari, edge, firefox */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
     }
   </style>
 </head>
@@ -56,7 +59,7 @@
     </div>
   </header>
 
-  <main class="flex-1 space-y-1.5 sm:space-y-2 overflow-y-auto pr-0.5" id="hotel-list">
+  <main class="flex-1 space-y-1.5 sm:space-y-2 overflow-y-auto pr-0.5 pb-2 sm:pb-3" id="hotel-list">
     <!-- Hotel Cards dynamically rendered here -->
   </main>
 
