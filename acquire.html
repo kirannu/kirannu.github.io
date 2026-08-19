@@ -26,20 +26,20 @@
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col justify-between p-2.5 sm:p-4 selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col justify-between p-3 sm:p-4 selection:bg-indigo-500 selection:text-white">
 
   <!-- Header Surface -->
-  <header class="flex items-center justify-between border-b border-slate-800/80 pb-2.5 mb-2.5 sm:mb-3 shrink-0">
+  <header class="flex items-center justify-between pb-3 mb-2 shrink-0 border-b border-slate-900">
     <div class="flex items-center gap-2">
       <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
-        <i class="fa-solid fa-chart-line text-amber-400"></i>
+        <i class="fa-solid fa-chart-line text-amber-400 text-sm"></i>
         <span>ACQUIRE <span class="text-xs text-amber-400/90 font-mono font-medium">2023</span></span>
       </h1>
     </div>
 
     <div class="flex items-center gap-2">
-      <!-- Segmented Mode Switcher Token -->
-      <div class="bg-slate-900/90 p-1 rounded-xl border border-slate-800 flex items-center text-xs shadow-inner">
+      <!-- Mode Switcher -->
+      <div class="bg-slate-900 p-1 rounded-xl flex items-center text-xs">
         <button id="btn-tycoon" onclick="setMode('tycoon')" 
           class="px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm">
           タイクーン
@@ -50,10 +50,10 @@
         </button>
       </div>
 
-      <!-- Action Button Token -->
+      <!-- Action Button -->
       <button onclick="toggleModal(true)" 
-        class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 border border-slate-800 rounded-xl text-xs flex items-center justify-center transition shrink-0 active:scale-95 shadow-sm"
-        title="株価ボード（元情報）を開く"
+        class="w-8 h-8 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-slate-100 rounded-xl text-xs flex items-center justify-center transition shrink-0 active:scale-95"
+        title="株価ボードを開く"
         aria-label="株価ボードを開く">
         <i class="fa-solid fa-table"></i>
       </button>
@@ -63,20 +63,20 @@
   <!-- Main Content Scroll Area -->
   <main class="flex-1 flex flex-col justify-between overflow-y-auto pr-0.5 pb-2 sm:pb-3 gap-3">
     <!-- Active Hotel Cards Container -->
-    <div id="active-hotels" class="space-y-2 sm:space-y-2.5">
+    <div id="active-hotels" class="space-y-2">
       <!-- Active Hotel Cards dynamically rendered here -->
     </div>
 
-    <!-- Unestablished Hotels Surface -->
-    <div id="unestablished-section" class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-2.5 sm:p-3 mt-auto shrink-0 backdrop-blur-sm">
+    <!-- Unestablished Hotels Section -->
+    <div id="unestablished-section" class="bg-slate-900/50 rounded-2xl p-2.5 sm:p-3 mt-auto shrink-0">
       <div class="text-[11px] text-slate-400 mb-2 font-medium flex items-center justify-between">
         <span class="flex items-center gap-1.5">
-          <i class="fa-solid fa-building text-slate-400"></i>
+          <i class="fa-solid fa-building text-slate-500"></i>
           <span class="tracking-wide">未設立のホテル</span>
         </span>
-        <span class="text-[10px] text-slate-400 font-mono">タップで設立 (2コマ)</span>
+        <span class="text-[10px] text-slate-500 font-mono">タップで設立 (2コマ)</span>
       </div>
-      <div id="unestablished-hotels" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2">
+      <div id="unestablished-hotels" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         <!-- Unestablished Hotel Buttons rendered here -->
       </div>
     </div>
@@ -156,15 +156,15 @@
   </div>
 
   <script>
-    // 7 Hotels Definition with Distinct High-Contrast Visual Brand Colors
+    // 7 Hotels Definition with Optimized High-Contrast Brand Colors
     const HOTELS = [
-      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  border: 'border-l-red-500',    textColor: 'text-red-400',    bgTint: 'hover:border-red-500/50' },
-      { id: 'Tower',       name: 'Tower',       tier: 'small',  border: 'border-l-yellow-400', textColor: 'text-yellow-300', bgTint: 'hover:border-yellow-400/50' },
-      { id: 'American',    name: 'American',    tier: 'medium', border: 'border-l-blue-500',   textColor: 'text-blue-400',   bgTint: 'hover:border-blue-500/50' },
-      { id: 'Festival',    name: 'Festival',    tier: 'medium', border: 'border-l-emerald-500',textColor: 'text-emerald-400',bgTint: 'hover:border-emerald-500/50' },
-      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', border: 'border-l-purple-500', textColor: 'text-purple-400', bgTint: 'hover:border-purple-500/50' },
-      { id: 'Continental', name: 'Continental', tier: 'large',  border: 'border-l-cyan-400',   textColor: 'text-cyan-300',   bgTint: 'hover:border-cyan-400/50' },
-      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  border: 'border-l-orange-500', textColor: 'text-orange-400', bgTint: 'hover:border-orange-500/50' }
+      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  textColor: 'text-red-400' },
+      { id: 'Tower',       name: 'Tower',       tier: 'small',  textColor: 'text-yellow-300' },
+      { id: 'American',    name: 'American',    tier: 'medium', textColor: 'text-blue-500' },     // Royal Blue
+      { id: 'Festival',    name: 'Festival',    tier: 'medium', textColor: 'text-lime-400' },     // Bright Lime Green
+      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', textColor: 'text-purple-400' },
+      { id: 'Continental', name: 'Continental', tier: 'large',  textColor: 'text-sky-300' },      // Bright Sky Cyan
+      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  textColor: 'text-orange-400' }
     ];
 
     // Master Evaluation Table (2023 Rules)
@@ -258,18 +258,13 @@
       if (sendBtn) sendBtn.disabled = true;
 
       const systemPrompt = `あなたはボードゲーム「アクワイア (Acquire) 2023年版」のプロフェッショナルAI戦術アドバイザーです。
-プレイヤーが提示する現在の盤面情報（各ホテルのコマ数、株価、配当金、大規模/安全状態、モード）に基づき、以下の点について実践的で鋭い戦術助言を日本語で回答してください：
-1. 現在の盤面で最も投資効率（コスパ）が良い・狙い目のホテル株
-2. 併合（Merger）の危険性やチャンス、大規模（安全）化に向けた立ち回り
-3. 次の手番で意識すべき短期・中期的な方針
-
-要点をわかりやすく箇条書きや太字(**強調**)を交えて回答してください。長すぎず簡潔で読みやすい文章を心がけてください。`;
+プレイヤーが提示する現在の盤面情報に基づき、狙い目の株や併合対策を簡潔に回答してください。要点を箇条書きや太字(**強調**)でまとめ、長すぎない文章で答えてください。`;
 
       const contextState = getGameStateSummary();
       const fullUserPrompt = `${contextState}\n【ユーザーの質問・指示】\n${userQuestion}`;
 
       const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
       const payload = {
         contents: [{ parts: [{ text: fullUserPrompt }] }],
@@ -340,7 +335,7 @@
               <th class="py-1.5 px-0.5">小</th>
               <th class="py-1.5 px-0.5">中</th>
               <th class="py-1.5 px-0.5">大</th>
-              <th class="py-1.5 px-1 text-amber-300 bg-amber-500/10 border-x border-amber-500/20 font-bold">株価</th>
+              <th class="py-1.5 px-1 text-slate-200 font-bold">株価</th>
               <th class="py-1.5 px-1 text-slate-300">筆頭</th>
               <th class="py-1.5 px-1 text-slate-300">第2</th>
               ${isTycoon ? '<th class="py-1.5 px-1 text-slate-300">第3</th>' : ''}
@@ -362,7 +357,7 @@
             <td class="py-1.5 px-0.5 text-slate-400 font-mono">${s}</td>
             <td class="py-1.5 px-0.5 text-slate-400 font-mono">${m}</td>
             <td class="py-1.5 px-0.5 text-slate-400 font-mono">${l}</td>
-            <td class="py-1.5 px-1 font-bold text-amber-300 bg-amber-500/10 border-x border-amber-500/20">${price}</td>
+            <td class="py-1.5 px-1 font-bold text-slate-100 font-mono">${price}</td>
             <td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[0].toLocaleString()}</td>
             <td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[1].toLocaleString()}</td>
             ${isTycoon ? `<td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[2].toLocaleString()}</td>` : ''}
@@ -397,7 +392,7 @@
     }
 
     function establishHotel(id) {
-      hotelSizes[id] = 2; // Default starting size for newly established hotel
+      hotelSizes[id] = 2; // Default starting size
       render();
     }
 
@@ -463,7 +458,7 @@
         const size = hotelSizes[hotel.id] || 0;
 
         if (size > 0) {
-          // ESTABLISHED HOTEL (CARD DISPLAY)
+          // ESTABLISHED HOTEL (DISTINCT COLOR PALETTE)
           activeCount++;
           const isSafe = size >= 11;
           const fin = getFinancials(hotel.tier, size);
@@ -473,96 +468,99 @@
           const fmtB2 = fin.b2;
           const fmtB3 = fin.b3;
 
-          let statsGridHtml = '';
+          let bonusesHtml = '';
           if (isTycoon) {
-            statsGridHtml = `
-              <div class="flex items-stretch gap-1.5 font-mono text-center">
-                <!-- Stock Price Primary Focus Token -->
-                <div class="w-1/3 bg-amber-500/10 border border-amber-500/30 rounded-xl p-1 flex flex-col justify-center shadow-inner">
-                  <span class="text-[10px] text-slate-400 font-sans font-medium tracking-tight">株価</span>
-                  <span class="font-bold text-amber-300 text-sm sm:text-base leading-snug">${fmtPrice}</span>
+            bonusesHtml = `
+              <div class="flex items-center gap-3 font-mono text-xs text-slate-300">
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[10px] text-slate-500 font-sans">筆頭</span>
+                  <span>${fmtB1}</span>
                 </div>
-                <!-- Bonuses Secondary Token -->
-                <div class="w-2/3 bg-slate-950/80 border border-slate-800 rounded-xl p-1 grid grid-cols-3 divide-x divide-slate-800/80 shadow-inner">
-                  <div class="flex flex-col justify-center">
-                    <span class="text-[10px] text-slate-400 font-sans font-medium">筆頭</span>
-                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB1}</span>
-                  </div>
-                  <div class="flex flex-col justify-center">
-                    <span class="text-[10px] text-slate-400 font-sans font-medium">第2</span>
-                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB2}</span>
-                  </div>
-                  <div class="flex flex-col justify-center">
-                    <span class="text-[10px] text-slate-400 font-sans font-medium">第3</span>
-                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB3}</span>
-                  </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[10px] text-slate-500 font-sans">第2</span>
+                  <span>${fmtB2}</span>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[10px] text-slate-500 font-sans">第3</span>
+                  <span>${fmtB3}</span>
                 </div>
               </div>
             `;
           } else {
-            statsGridHtml = `
-              <div class="flex items-stretch gap-1.5 font-mono text-center">
-                <!-- Stock Price Primary Focus Token -->
-                <div class="w-1/3 bg-amber-500/10 border border-amber-500/30 rounded-xl p-1 flex flex-col justify-center shadow-inner">
-                  <span class="text-[10px] text-slate-400 font-sans font-medium tracking-tight">株価</span>
-                  <span class="font-bold text-amber-300 text-sm sm:text-base leading-snug">${fmtPrice}</span>
+            bonusesHtml = `
+              <div class="flex items-center gap-3 font-mono text-xs text-slate-300">
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[10px] text-slate-500 font-sans">筆頭</span>
+                  <span>${fmtB1}</span>
                 </div>
-                <!-- Bonuses Secondary Token -->
-                <div class="w-2/3 bg-slate-950/80 border border-slate-800 rounded-xl p-1 grid grid-cols-2 divide-x divide-slate-800/80 shadow-inner">
-                  <div class="flex flex-col justify-center">
-                    <span class="text-[10px] text-slate-400 font-sans font-medium">筆頭</span>
-                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB1}</span>
-                  </div>
-                  <div class="flex flex-col justify-center">
-                    <span class="text-[10px] text-slate-400 font-sans font-medium">第2</span>
-                    <span class="text-slate-200 text-xs sm:text-sm leading-snug">${fmtB2}</span>
-                  </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-[10px] text-slate-500 font-sans">第2</span>
+                  <span>${fmtB2}</span>
                 </div>
               </div>
             `;
           }
 
           const cardHtml = `
-            <div class="border-l-4 ${hotel.border} bg-slate-900/90 hover:bg-slate-900 p-2.5 sm:p-3 rounded-r-2xl border-y border-r border-slate-800/80 transition-all duration-200 shadow-md">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                  <i class="fa-solid fa-hotel ${hotel.textColor} text-xs sm:text-sm shrink-0"></i>
+            <div class="bg-slate-900 rounded-2xl p-3 flex flex-col gap-2">
+              <!-- Top Row: Hotel Icon, Name, Plain Text Building Count, Safe Badge & Grouped Buttons -->
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <i class="fa-solid fa-hotel ${hotel.textColor} text-base shrink-0"></i>
                   <span class="font-bold text-base sm:text-lg ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
-                  <input type="number" value="${size}" oninput="onInputSize('${hotel.id}', this.value)" 
-                    class="w-10 h-7 bg-slate-950 text-center font-mono font-bold text-xs sm:text-sm text-slate-100 rounded-lg border border-slate-700/80 focus:outline-none focus:border-indigo-500 shrink-0">
-                  ${isSafe ? '<span class="text-[10px] px-2 py-0.5 rounded-full border border-slate-700 bg-slate-800/80 text-slate-300 font-mono shrink-0 font-medium tracking-wide">大規模</span>' : ''}
+                  
+                  <!-- Plain Text Building Count -->
+                  <span class="text-xs font-mono font-medium text-slate-400 shrink-0">
+                    ${size}コマ
+                  </span>
+
+                  ${isSafe ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono shrink-0 font-medium">大規模</span>' : ''}
                 </div>
-                <!-- Action Controls Block -->
-                <div class="flex items-center gap-1 shrink-0">
+
+                <!-- Separated Reset & Grouped Stepper Buttons -->
+                <div class="flex items-center gap-2 shrink-0">
+                  <!-- Clear / Reset Button -->
                   <button onclick="clearSize('${hotel.id}')" title="解散・リセット"
-                    class="w-7 h-8 text-slate-400 hover:text-rose-400 active:text-rose-400 bg-slate-800/40 hover:bg-rose-500/20 rounded-lg text-xs flex items-center justify-center transition border border-slate-700/50 active:scale-95 mr-1">
+                    class="w-7 h-8 text-slate-500 hover:text-rose-400 active:text-rose-400 rounded-lg text-xs flex items-center justify-center transition active:scale-95">
                     <i class="fa-solid fa-rotate-left"></i>
                   </button>
-                  <button onclick="changeSize('${hotel.id}', -1)" title="1減らす"
-                    class="w-11 h-8 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-200 rounded-lg font-bold text-xs flex items-center justify-center transition border border-slate-700/80 active:scale-95 shadow-sm">
-                    -
-                  </button>
-                  <button onclick="changeSize('${hotel.id}', 1)" title="1増やす"
-                    class="w-11 h-8 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-lg font-bold text-xs flex items-center justify-center transition shadow-md shadow-emerald-950/40 active:scale-95 border border-emerald-500/40">
-                    +
-                  </button>
+
+                  <!-- Joined Stepper Group -->
+                  <div class="inline-flex rounded-lg overflow-hidden bg-slate-950 p-0.5">
+                    <button onclick="changeSize('${hotel.id}', -1)" title="1減らす"
+                      class="w-10 sm:w-11 h-8 bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-slate-200 font-bold text-sm rounded-l flex items-center justify-center transition active:scale-95">
+                      -
+                    </button>
+                    <button onclick="changeSize('${hotel.id}', 1)" title="1増やす"
+                      class="w-10 sm:w-11 h-8 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-sm rounded-r flex items-center justify-center transition active:scale-95">
+                      +
+                    </button>
+                  </div>
                 </div>
               </div>
-              ${statsGridHtml}
+
+              <!-- Bottom Row: White Stock Price & Bonuses -->
+              <div class="flex items-center justify-between pt-0.5">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[11px] text-slate-500 font-medium">株価</span>
+                  <span class="font-bold text-slate-100 text-base font-mono">${fmtPrice}</span>
+                </div>
+                ${bonusesHtml}
+              </div>
             </div>
           `;
           activeContainer.insertAdjacentHTML('beforeend', cardHtml);
         } else {
-          // UNESTABLISHED HOTEL (COMPACT BUTTON DISPLAY TOKEN)
+          // UNESTABLISHED HOTEL (BORDERLESS FLAT BUTTON)
           unestablishedCount++;
           const buttonHtml = `
             <button onclick="establishHotel('${hotel.id}')" 
-              class="border-l-4 ${hotel.border} bg-slate-900/90 hover:bg-slate-800/90 border-t border-r border-b border-slate-800 rounded-r-xl p-2 flex items-center justify-between text-left transition active:scale-95 group shadow-sm ${hotel.bgTint}">
-              <div class="flex items-center gap-1.5 min-w-0">
+              class="bg-slate-900 hover:bg-slate-800 rounded-xl p-2.5 flex items-center justify-between text-left transition active:scale-95">
+              <div class="flex items-center gap-2 min-w-0">
                 <i class="fa-solid fa-hotel ${hotel.textColor} text-xs shrink-0"></i>
                 <span class="font-semibold text-xs sm:text-sm ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
               </div>
-              <span class="text-[10px] bg-slate-800/80 text-slate-300 font-semibold px-1.5 py-0.5 rounded-lg border border-slate-700/80 shrink-0 group-hover:bg-slate-700 transition">
+              <span class="text-[10px] text-slate-500 font-medium shrink-0">
                 + 設立
               </span>
             </button>
@@ -574,10 +572,10 @@
       // Show placeholder if no active hotels
       if (activeCount === 0) {
         activeContainer.innerHTML = `
-          <div class="text-center py-10 text-slate-400 text-xs border border-dashed border-slate-800/80 rounded-2xl bg-slate-900/30">
-            <i class="fa-solid fa-building-circle-arrow-right text-2xl mb-2 text-slate-400"></i>
-            <p class="font-medium text-slate-300">現在、設立済みのホテルはありません</p>
-            <p class="text-[10px] text-slate-400 mt-1">下の「未設立のホテル」ボタンをタップして設立してください</p>
+          <div class="text-center py-10 text-slate-500 text-xs border border-dashed border-slate-900 rounded-2xl bg-slate-900/20">
+            <i class="fa-solid fa-building-circle-arrow-right text-2xl mb-2 text-slate-600"></i>
+            <p class="font-medium text-slate-400">現在、設立済みのホテルはありません</p>
+            <p class="text-[10px] text-slate-600 mt-1">下の「未設立のホテル」ボタンをタップして設立してください</p>
           </div>
         `;
       }
@@ -597,3 +595,4 @@
   </script>
 </body>
 </html>
+
