@@ -7,31 +7,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Prevent double-tap zoom and text selection during fast tapping */
     html, body, button, input {
       touch-action: manipulation;
       user-select: none;
       -webkit-user-select: none;
     }
-    /* Prevent iOS Safari auto-zoom on input focus */
     input[type=number] {
       font-size: 16px !important;
       -moz-appearance: textfield;
     }
-    /* Hide spin buttons for chrome, safari, edge, firefox */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
 
-    /* Keyframe Animations */
-    
-    /* 1. Card Expand / Spawn */
     @keyframes cardSpawn {
       0% {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(16px) scale(0.98);
         max-height: 0px;
         padding-top: 0px;
         padding-bottom: 0px;
@@ -39,32 +33,24 @@
       }
       100% {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         max-height: 120px;
-        padding-top: 0.75rem; /* p-3 equivalent */
+        padding-top: 0.75rem;
         padding-bottom: 0.75rem;
-        margin-bottom: 0.5rem; /* mb-2 equivalent */
+        margin-bottom: 0.5rem;
       }
     }
 
-    /* 2. Card Spawn Background Smooth Fade */
     @keyframes cardBgHighlightFade {
-      0% {
-        background-color: #1e293b; /* slate-800 */
-      }
-      25% {
-        background-color: #1e293b;
-      }
-      100% {
-        background-color: #0f172a; /* slate-900 */
-      }
+      0% { background-color: #1e293b; }
+      25% { background-color: #1e293b; }
+      100% { background-color: #0f172a; }
     }
 
-    /* 3. Card Shrink / Remove */
     @keyframes cardRemove {
       0% {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         max-height: 120px;
         padding-top: 0.75rem;
         padding-bottom: 0.75rem;
@@ -72,7 +58,7 @@
       }
       100% {
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(16px) scale(0.98);
         max-height: 0px;
         padding-top: 0px;
         padding-bottom: 0px;
@@ -80,21 +66,12 @@
       }
     }
 
-    /* 4. Direct Action Feedback (Building Count - Immediate & Quick Pop) */
     @keyframes directPop {
-      0% {
-        transform: scale(1);
-      }
-      40% {
-        transform: scale(1.22);
-      }
-      100% {
-        transform: scale(1);
-      }
+      0% { transform: scale(1); }
+      40% { transform: scale(1.22); }
+      100% { transform: scale(1); }
     }
 
-    /* Animation Classes */
-    
     .animate-card-spawn {
       animation: cardSpawn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards, 
                  cardBgHighlightFade 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
@@ -107,7 +84,6 @@
       pointer-events: none;
     }
 
-    /* Direct Action: Immediate Pop */
     .animate-direct-pop {
       display: inline-block;
       animation: directPop 0.18s cubic-bezier(0.16, 1, 0.3, 1);
@@ -116,12 +92,11 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col justify-between p-3 sm:p-4 selection:bg-indigo-500 selection:text-white">
 
-  <!-- Header Surface -->
   <header class="flex items-center justify-between pb-3 mb-2 shrink-0 border-b border-slate-900">
     <div class="flex items-center gap-2">
       <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2">
         <i class="fa-solid fa-chart-line text-amber-400 text-sm"></i>
-        <span>ACQUIRE <span class="text-xs text-amber-400/90 font-mono font-medium">2023</span></span>
+        <span>ACQUIRE <span class="text-xs text-amber-400/90 tabular-nums font-medium">2023</span></span>
       </h1>
     </div>
 
@@ -129,11 +104,11 @@
       <!-- Mode Switcher -->
       <div class="bg-slate-900 p-1 rounded-xl flex items-center text-xs">
         <button id="btn-tycoon" onclick="setMode('tycoon')" 
-          class="px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm">
+          class="px-2.5 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm">
           タイクーン
         </button>
         <button id="btn-classic" onclick="setMode('classic')" 
-          class="px-3 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200">
+          class="px-2.5 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200">
           クラシック
         </button>
       </div>
@@ -148,7 +123,6 @@
     </div>
   </header>
 
-  <!-- Main Content Scroll Area -->
   <main class="flex-1 flex flex-col justify-between overflow-y-auto pr-0.5 pb-2 sm:pb-3 gap-3">
     <!-- Active Hotel Cards Container -->
     <div id="active-hotels" class="w-full">
@@ -170,10 +144,8 @@
     </div>
   </main>
 
-  <!-- 株価ボード (2023年版) モーダル -->
   <div id="board-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleModal(false)">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-      <!-- モーダルヘッダー -->
       <div class="p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
         <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
           <i class="fa-solid fa-table text-amber-400"></i>
@@ -183,79 +155,23 @@
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <!-- モーダル本文 (テーブル) -->
-      <div class="p-2.5 sm:p-3 overflow-y-auto flex-1 font-mono text-xs" id="modal-table-container">
-        <!-- JSでモードに応じてテーブルを描画 -->
-      </div>
-    </div>
-  </div>
-
-  <!-- AI 戦術参謀 モーダル -->
-  <div id="ai-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4" onclick="if(event.target === this) toggleAiModal(false)">
-    <div class="bg-slate-900 border border-indigo-900/60 rounded-2xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-      <!-- モーダルヘッダー -->
-      <div class="p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
-        <h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
-          <span>AI戦術参謀 (Gemini)</span>
-        </h2>
-        <button onclick="toggleAiModal(false)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs flex items-center justify-center transition active:scale-95">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- モーダル内容 -->
-      <div class="p-3.5 overflow-y-auto flex-1 space-y-3 font-sans text-xs">
-        <!-- クイックアクションボタン -->
-        <div class="space-y-1.5">
-          <div class="text-[10px] text-slate-400 font-medium">クイックAI診断</div>
-          <div class="flex flex-wrap gap-1.5">
-            <button onclick="runAiAnalysis('current')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold flex items-center gap-1.5 transition shadow-sm active:scale-95">
-              <i class="fa-solid fa-chart-line text-indigo-200"></i>
-              <span>現在の戦況を全体診断</span>
-            </button>
-            <button onclick="runAiAnalysis('buy')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
-              💡 狙い目の購入株
-            </button>
-            <button onclick="runAiAnalysis('merger')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition active:scale-95">
-              🔀 併合・安全化対策
-            </button>
-          </div>
-        </div>
-
-        <!-- AI 回答表示エリア -->
-        <div id="ai-response-box" class="bg-slate-950 border border-slate-800 rounded-xl p-3 min-h-[140px] text-slate-200 leading-relaxed overflow-y-auto max-h-[300px]">
-          <div class="text-slate-400 text-center py-8">
-            <i class="fa-solid fa-robot text-2xl mb-2 text-indigo-400/80"></i>
-            <p>「現在の戦況を全体診断」または質問を入力してください。<br>盤面のホテルコマ数や株価から最適戦略をアドバイスします。</p>
-          </div>
-        </div>
-
-        <!-- カスタム質問入力フォーム -->
-        <form onsubmit="handleAiSubmit(event)" class="flex gap-1.5 pt-1 border-t border-slate-800">
-          <input type="text" id="ai-custom-input" placeholder="例: サクソンとタワーが併合しそうだがどちらの株を買うべき？" 
-            class="flex-1 bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
-          <button type="submit" id="ai-send-btn" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs flex items-center gap-1 transition shrink-0 active:scale-95">
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
-        </form>
-      </div>
+      <div class="p-2.5 sm:p-3 overflow-y-auto flex-1 font-mono text-xs" id="modal-table-container"></div>
     </div>
   </div>
 
   <script>
-    // 7 Hotels Definition with Distinct Brand Colors
     const HOTELS = [
-      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  textColor: 'text-red-400' },
-      { id: 'Tower',       name: 'Tower',       tier: 'small',  textColor: 'text-yellow-300' },
-      { id: 'American',    name: 'American',    tier: 'medium', textColor: 'text-blue-500' },
-      { id: 'Festival',    name: 'Festival',    tier: 'medium', textColor: 'text-lime-400' },
-      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', textColor: 'text-purple-400' },
-      { id: 'Continental', name: 'Continental', tier: 'large',  textColor: 'text-sky-300' },
-      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  textColor: 'text-orange-400' }
+      { id: 'Sackson',     name: 'Sackson',     tier: 'small',  textColor: 'text-red-500',    badgeBg: 'bg-red-500',    badgeText: 'text-slate-900' },
+      { id: 'Tower',       name: 'Tower',       tier: 'small',  textColor: 'text-yellow-400', badgeBg: 'bg-yellow-400', badgeText: 'text-slate-900' },
+      { id: 'American',    name: 'American',    tier: 'medium', textColor: 'text-blue-600',   badgeBg: 'bg-blue-600',   badgeText: 'text-slate-900' },
+      { id: 'Festival',    name: 'Festival',    tier: 'medium', textColor: 'text-lime-400',   badgeBg: 'bg-lime-400',   badgeText: 'text-slate-900' },
+      { id: 'Worldwide',   name: 'Worldwide',   tier: 'medium', textColor: 'text-purple-500', badgeBg: 'bg-purple-500', badgeText: 'text-slate-900' },
+      { id: 'Continental', name: 'Continental', tier: 'large',  textColor: 'text-sky-400',    badgeBg: 'bg-sky-400',    badgeText: 'text-slate-900' },
+      { id: 'Imperial',    name: 'Imperial',    tier: 'large',  textColor: 'text-orange-500', badgeBg: 'bg-orange-500', badgeText: 'text-slate-900' }
     ];
 
-    // Master Evaluation Table (2023 Rules)
+    const TIER_LABELS = { small: '小', medium: '中', large: '大' };
+
     const EVAL_TABLE = [
       { price: 200,  small: [2, 2],   medium: null,    large: null,    tycoon: [2000, 1500, 1000], classic: [2000, 1000] },
       { price: 300,  small: [3, 3],   medium: [2, 2],  large: null,    tycoon: [3000, 2200, 1500], classic: [3000, 1500] },
@@ -270,202 +186,61 @@
       { price: 1200, small: null,     medium: null,    large: [41,999],tycoon: [12000, 8200, 6000], classic: [12000, 6000] }
     ];
 
-    // App State
-    let currentMode = 'tycoon'; // 'tycoon' or 'classic'
+    let currentMode = 'tycoon';
     const hotelSizes = {
       Sackson: 0, Tower: 0, American: 0, Festival: 0, Worldwide: 0, Continental: 0, Imperial: 0
     };
-
-    // Track newly established hotel ID
     let newlyEstablishedId = null;
 
-    // Helper: Calculate next building count that triggers a price change
     function getNextTierSize(tier, currentSize) {
       if (currentSize < 2) return null;
-
       for (let i = 0; i < EVAL_TABLE.length; i++) {
         const range = EVAL_TABLE[i][tier];
         if (range && currentSize >= range[0] && currentSize <= range[1]) {
           for (let j = i + 1; j < EVAL_TABLE.length; j++) {
             const nextRange = EVAL_TABLE[j][tier];
-            if (nextRange) {
-              return nextRange[0];
-            }
+            if (nextRange) return nextRange[0];
           }
-          return 'MAX';
+          return '最大';
         }
       }
       return null;
     }
 
-    // Helper: Parse currency string like "$3,000" to integer 3000
     function parseCurrency(str) {
       if (!str || str === '-') return null;
       const num = parseInt(str.replace(/[\$,]/g, ''), 10);
       return isNaN(num) ? null : num;
     }
 
-    // Helper: Smooth Count Up / Down Rolling Animation for Financials
     function animateValueCount(el, startVal, endVal, duration = 300) {
       if (!el) return;
       if (startVal === null || endVal === null || startVal === endVal) {
         el.textContent = endVal !== null ? '$' + endVal.toLocaleString() : '-';
         return;
       }
-
       const startTime = performance.now();
-
       function step(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const ease = 1 - Math.pow(1 - progress, 3);
         const current = Math.round(startVal + (endVal - startVal) * ease);
-
         el.textContent = '$' + current.toLocaleString();
-
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        } else {
-          el.textContent = '$' + endVal.toLocaleString();
-        }
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = '$' + endVal.toLocaleString();
       }
-
       requestAnimationFrame(step);
     }
 
-    // Haptic feedback function
     function triggerHaptic(type = 'light') {
       if ('vibrate' in navigator) {
         try {
           if (type === 'light') navigator.vibrate(12);
           else if (type === 'medium') navigator.vibrate(20);
-        } catch (e) {
-          // Fallback gracefully
-        }
+        } catch (e) {}
       }
     }
 
-    // AI Modal Toggle
-    function toggleAiModal(show) {
-      triggerHaptic('light');
-      const modal = document.getElementById('ai-modal');
-      if (!modal) return;
-      if (show) {
-        modal.classList.remove('hidden');
-      } else {
-        modal.classList.add('hidden');
-      }
-    }
-
-    async function fetchGeminiWithBackoff(apiUrl, payload, maxRetries = 3) {
-      let delay = 1000;
-      for (let i = 0; i < maxRetries; i++) {
-        try {
-          const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (res.ok) {
-            return await res.json();
-          }
-        } catch (err) {
-          if (i === maxRetries - 1) throw err;
-        }
-        await new Promise(resolve => setTimeout(resolve, delay));
-        delay *= 2;
-      }
-      throw new Error('Gemini API 呼び出しに失敗しました。');
-    }
-
-    function formatAiResponse(text) {
-      if (!text) return '';
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-300 font-bold">$1</strong>')
-        .replace(/^\s*[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc">$1</li>')
-        .replace(/\n\n/g, '<br><br>')
-        .replace(/\n/g, '<br>');
-    }
-
-    function getGameStateSummary() {
-      const isTycoon = (currentMode === 'tycoon');
-      let summary = `【アクワイア 盤面情報 (${isTycoon ? 'タイクーンモード' : 'クラシックモード'})】\n`;
-      HOTELS.forEach(h => {
-        const size = hotelSizes[h.id] || 0;
-        const fin = getFinancials(h.tier, size);
-        summary += `- ${h.name} (${h.tier === 'small' ? '小' : h.tier === 'medium' ? '中' : '大'}): コマ数 ${size} | 株価: ${fin.price} | 筆頭配当: ${fin.b1} | 第2配当: ${fin.b2}${isTycoon ? ' | 第3配当: ' + fin.b3 : ''}\n`;
-      });
-      return summary;
-    }
-
-    async function queryGeminiAdvisor(userQuestion) {
-      const box = document.getElementById('ai-response-box');
-      const sendBtn = document.getElementById('ai-send-btn');
-      if (!box) return;
-
-      box.innerHTML = `
-        <div class="flex flex-col items-center justify-center py-8 text-indigo-300 gap-2">
-          <i class="fa-solid fa-circle-notch fa-spin text-2xl"></i>
-          <span class="text-xs font-medium">Gemini AI が戦況を分析中...</span>
-        </div>
-      `;
-      if (sendBtn) sendBtn.disabled = true;
-
-      const systemPrompt = `あなたはボードゲーム「アクワイア (Acquire) 2023年版」のプロフェッショナルAI戦術アドバイザーです。
-プレイヤーが提示する現在の盤面情報に基づき、狙い目の株や併合対策を簡潔に回答してください。要点を箇条書きや太字(**強調**)でまとめ、長すぎない文章で答えてください。`;
-
-      const contextState = getGameStateSummary();
-      const fullUserPrompt = `${contextState}\n【ユーザーの質問・指示】\n${userQuestion}`;
-
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-      const payload = {
-        contents: [{ parts: [{ text: fullUserPrompt }] }],
-        systemInstruction: { parts: [{ text: systemPrompt }] }
-      };
-
-      try {
-        const result = await fetchGeminiWithBackoff(apiUrl, payload);
-        const candidateText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (candidateText) {
-          box.innerHTML = formatAiResponse(candidateText);
-        } else {
-          box.innerHTML = `<div class="text-rose-400 p-2">AIからの回答を取得できませんでした。再度お試しください。</div>`;
-        }
-      } catch (err) {
-        box.innerHTML = `<div class="text-rose-400 p-2">エラーが発生しました: ${err.message || '通信に失敗しました'}</div>`;
-      } finally {
-        if (sendBtn) sendBtn.disabled = false;
-      }
-    }
-
-    function runAiAnalysis(type) {
-      triggerHaptic('light');
-      if (type === 'current') {
-        queryGeminiAdvisor("現在の全体盤面を分析し、最適な投資戦略と注意すべき併合リスクを教えてください。");
-      } else if (type === 'buy') {
-        queryGeminiAdvisor("現在の株価と配当金のバランスから、今一番購入すべきお得なホテル株トップ2とその理由を教えてください。");
-      } else if (type === 'merger') {
-        queryGeminiAdvisor("現在併合が起きそうなホテル、または安全化（11コマ以上）に近いホテルを分析し、併合対策や乗っ取り対策のアドバイスをお願いします。");
-      }
-    }
-
-    function handleAiSubmit(e) {
-      e.preventDefault();
-      triggerHaptic('light');
-      const input = document.getElementById('ai-custom-input');
-      if (!input || !input.value.trim()) return;
-      const q = input.value.trim();
-      input.value = '';
-      queryGeminiAdvisor(q);
-    }
-
-    // Modal toggle
     function toggleModal(show) {
       triggerHaptic('light');
       const modal = document.getElementById('board-modal');
@@ -478,15 +253,17 @@
       }
     }
 
+    document.addEventListener('DOMContentLoaded', () => {
+      render();
+    });
+
     function renderModalTable() {
       const container = document.getElementById('modal-table-container');
       const titleEl = document.getElementById('modal-title');
       if (!container) return;
 
       const isTycoon = (currentMode === 'tycoon');
-      if (titleEl) {
-        titleEl.textContent = `株価ボード [${isTycoon ? 'タイクーンモード' : 'クラシックモード'}]`;
-      }
+      if (titleEl) titleEl.textContent = `株価ボード [${isTycoon ? 'タイクーンモード' : 'クラシックモード'}]`;
 
       let html = `
         <table class="w-full text-center border-collapse">
@@ -508,31 +285,26 @@
         const s = row.small ? (row.small[0] === row.small[1] ? row.small[0] : `${row.small[0]}-${row.small[1] === 999 ? '以上' : row.small[1]}`) : '—';
         const m = row.medium ? (row.medium[0] === row.medium[1] ? row.medium[0] : `${row.medium[0]}-${row.medium[1] === 999 ? '以上' : row.medium[1]}`) : '—';
         const l = row.large ? (row.large[0] === row.large[1] ? row.large[0] : `${row.large[0]}-${row.large[1] === 999 ? '以上' : row.large[1]}`) : '—';
-
-        const price = '$' + row.price;
+        const price = '$' + row.price.toLocaleString();
         const bonuses = isTycoon ? row.tycoon : row.classic;
 
         html += `
           <tr class="hover:bg-slate-800/30 transition">
-            <td class="py-1.5 px-0.5 text-slate-400 font-mono">${s}</td>
-            <td class="py-1.5 px-0.5 text-slate-400 font-mono">${m}</td>
-            <td class="py-1.5 px-0.5 text-slate-400 font-mono">${l}</td>
-            <td class="py-1.5 px-1 font-bold text-slate-100 font-mono">${price}</td>
-            <td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[0].toLocaleString()}</td>
-            <td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[1].toLocaleString()}</td>
-            ${isTycoon ? `<td class="py-1.5 px-1 text-slate-300 font-mono">${'$' + bonuses[2].toLocaleString()}</td>` : ''}
+            <td class="py-1.5 px-0.5 text-slate-400 tabular-nums">${s}</td>
+            <td class="py-1.5 px-0.5 text-slate-400 tabular-nums">${m}</td>
+            <td class="py-1.5 px-0.5 text-slate-400 tabular-nums">${l}</td>
+            <td class="py-1.5 px-1 font-bold text-slate-100 tabular-nums">${price}</td>
+            <td class="py-1.5 px-1 text-slate-300 tabular-nums">${'$' + bonuses[0].toLocaleString()}</td>
+            <td class="py-1.5 px-1 text-slate-300 tabular-nums">${'$' + bonuses[1].toLocaleString()}</td>
+            ${isTycoon ? `<td class="py-1.5 px-1 text-slate-300 tabular-nums">${'$' + bonuses[2].toLocaleString()}</td>` : ''}
           </tr>
         `;
       });
 
-      html += `
-          </tbody>
-        </table>
+      html += `</tbody></table>
         <div class="mt-3 text-[10px] text-slate-400 text-center font-sans tracking-wide">
           ※ 小: Sackson, Tower | 中: American, Festival, Worldwide | 大: Continental, Imperial
-        </div>
-      `;
-
+        </div>`;
       container.innerHTML = html;
     }
 
@@ -543,65 +315,42 @@
       const btnClassic = document.getElementById('btn-classic');
 
       if (mode === 'tycoon') {
-        btnTycoon.className = "px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm";
-        btnClassic.className = "px-3 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200";
+        btnTycoon.className = "px-2.5 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm";
+        btnClassic.className = "px-2.5 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200";
       } else {
-        btnClassic.className = "px-3 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm";
-        btnTycoon.className = "px-3 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200";
+        btnClassic.className = "px-2.5 py-1 rounded-lg font-semibold transition text-slate-100 bg-indigo-600 shadow-sm";
+        btnTycoon.className = "px-2.5 py-1 rounded-lg font-medium transition text-slate-400 hover:text-slate-200";
       }
       render();
     }
 
     function establishHotel(id) {
       triggerHaptic('medium');
-      hotelSizes[id] = 2; // Default starting size
+      hotelSizes[id] = 2;
       newlyEstablishedId = id;
       render();
     }
 
-    // Direct Action (Pop) vs Indirect Consequence (Count Up/Down Animation)
     function animateChangedElements(hotelId, oldFin, newFin) {
       const card = document.getElementById(`card-${hotelId}`);
       if (!card) return;
 
-      // 1. Direct Cause: Building count pops instantly on user touch
       const sizeEl = card.querySelector('.js-size-val');
-      if (sizeEl) triggerDirectPop(sizeEl);
+      if (sizeEl) {
+        sizeEl.classList.remove('animate-direct-pop');
+        void sizeEl.offsetWidth;
+        sizeEl.classList.add('animate-direct-pop');
+      }
 
-      // 2. Indirect Consequence: Count Up / Down Rolling Animation for changed amounts
       const oldPriceNum = parseCurrency(oldFin.price);
       const newPriceNum = parseCurrency(newFin.price);
-      const priceEl = card.querySelector('.js-price-val');
-      if (priceEl && oldPriceNum !== newPriceNum) {
-        animateValueCount(priceEl, oldPriceNum, newPriceNum, 320);
-      }
+      animateValueCount(card.querySelector('.js-price-val'), oldPriceNum, newPriceNum, 320);
 
-      const oldB1Num = parseCurrency(oldFin.b1);
-      const newB1Num = parseCurrency(newFin.b1);
-      const b1El = card.querySelector('.js-b1-val');
-      if (b1El && oldB1Num !== newB1Num) {
-        animateValueCount(b1El, oldB1Num, newB1Num, 320);
+      animateValueCount(card.querySelector('.js-b1-val'), parseCurrency(oldFin.b1), parseCurrency(newFin.b1), 320);
+      animateValueCount(card.querySelector('.js-b2-val'), parseCurrency(oldFin.b2), parseCurrency(newFin.b2), 320);
+      if (currentMode === 'tycoon') {
+        animateValueCount(card.querySelector('.js-b3-val'), parseCurrency(oldFin.b3), parseCurrency(newFin.b3), 320);
       }
-
-      const oldB2Num = parseCurrency(oldFin.b2);
-      const newB2Num = parseCurrency(newFin.b2);
-      const b2El = card.querySelector('.js-b2-val');
-      if (b2El && oldB2Num !== newB2Num) {
-        animateValueCount(b2El, oldB2Num, newB2Num, 320);
-      }
-
-      const oldB3Num = parseCurrency(oldFin.b3);
-      const newB3Num = parseCurrency(newFin.b3);
-      const b3El = card.querySelector('.js-b3-val');
-      if (b3El && oldB3Num !== newB3Num) {
-        animateValueCount(b3El, oldB3Num, newB3Num, 320);
-      }
-    }
-
-    function triggerDirectPop(el) {
-      el.classList.remove('animate-direct-pop');
-      void el.offsetWidth; // Force reflow
-      el.classList.add('animate-direct-pop');
     }
 
     function changeSize(id, delta) {
@@ -611,13 +360,16 @@
       const newSize = Math.max(0, oldSize + delta);
       if (oldSize === newSize) return;
 
+      if (newSize === 0) {
+        clearSize(id);
+        return;
+      }
+
       const oldFin = getFinancials(hotel.tier, oldSize);
       const newFin = getFinancials(hotel.tier, newSize);
 
       hotelSizes[id] = newSize;
       render();
-
-      // Trigger direct pop for building count & smooth rolling count up/down for financial amounts
       animateChangedElements(id, oldFin, newFin);
     }
 
@@ -636,32 +388,12 @@
       }
     }
 
-    function onInputSize(id, val) {
-      const hotel = HOTELS.find(h => h.id === id);
-      const oldSize = hotelSizes[id] || 0;
-      const num = parseInt(val, 10);
-      const newSize = isNaN(num) || num < 0 ? 0 : num;
-
-      const oldFin = getFinancials(hotel.tier, oldSize);
-      const newFin = getFinancials(hotel.tier, newSize);
-
-      hotelSizes[id] = newSize;
-      render();
-
-      if (oldSize !== newSize) {
-        animateChangedElements(id, oldFin, newFin);
-      }
-    }
-
     function getFinancials(tier, size) {
-      if (size < 2) {
-        return { price: '-', b1: '-', b2: '-', b3: '-' };
-      }
-
+      if (size < 2) return { price: '-', b1: '-', b2: '-', b3: '-' };
       for (const row of EVAL_TABLE) {
         const range = row[tier];
         if (range && size >= range[0] && size <= range[1]) {
-          const priceStr = '$' + row.price;
+          const priceStr = '$' + row.price.toLocaleString();
           if (currentMode === 'tycoon') {
             return {
               price: priceStr,
@@ -697,87 +429,62 @@
 
       HOTELS.forEach((hotel) => {
         const size = hotelSizes[hotel.id] || 0;
+        const tierLabel = TIER_LABELS[hotel.tier];
 
         if (size > 0) {
-          // ESTABLISHED HOTEL
           activeCount++;
           const fin = getFinancials(hotel.tier, size);
           const nextTierSize = getNextTierSize(hotel.tier, size);
 
-          const fmtPrice = fin.price;
-          const fmtB1 = fin.b1;
-          const fmtB2 = fin.b2;
-          const fmtB3 = fin.b3;
-
-          let nextHintText = '';
-          if (nextTierSize === 'MAX') {
-            nextHintText = '<span class="text-[10px] text-slate-500 font-sans tracking-tight ml-1">（最大）</span>';
-          } else if (nextTierSize !== null) {
-            nextHintText = `<span class="text-[10px] text-slate-500 font-sans tracking-tight ml-1">（次${nextTierSize}）</span>`;
+          let nextHintHtml = '';
+          if (nextTierSize !== null) {
+            if (nextTierSize === '最大') {
+              nextHintHtml = `<div class="inline-flex items-baseline"><span class="text-[10px] text-slate-500 font-sans">最大</span></div>`;
+            } else {
+              nextHintHtml = `
+                <div class="inline-flex items-baseline gap-0.5">
+                  <span class="text-[10px] text-slate-500 font-sans">次</span>
+                  <span class="text-[10px] tabular-nums text-slate-400">${nextTierSize}</span>
+                </div>
+              `;
+            }
           }
 
-          let bonusesHtml = '';
-          if (isTycoon) {
-            bonusesHtml = `
-              <div class="flex items-center gap-3 font-mono text-xs text-slate-300">
-                <div class="flex items-baseline gap-1">
-                  <span class="text-[10px] text-slate-500 font-sans">筆頭</span>
-                  <span class="js-b1-val inline-block min-w-[50px] text-right">${fmtB1}</span>
-                </div>
-                <div class="flex items-baseline gap-1">
-                  <span class="text-[10px] text-slate-500 font-sans">第2</span>
-                  <span class="js-b2-val inline-block min-w-[50px] text-right">${fmtB2}</span>
-                </div>
-                <div class="flex items-baseline gap-1">
-                  <span class="text-[10px] text-slate-500 font-sans">第3</span>
-                  <span class="js-b3-val inline-block min-w-[50px] text-right">${fmtB3}</span>
-                </div>
-              </div>
-            `;
-          } else {
-            bonusesHtml = `
-              <div class="flex items-center gap-3 font-mono text-xs text-slate-300">
-                <div class="flex items-baseline gap-1">
-                  <span class="text-[10px] text-slate-500 font-sans">筆頭</span>
-                  <span class="js-b1-val inline-block min-w-[50px] text-right">${fmtB1}</span>
-                </div>
-                <div class="flex items-baseline gap-1">
-                  <span class="text-[10px] text-slate-500 font-sans">第2</span>
-                  <span class="js-b2-val inline-block min-w-[50px] text-right">${fmtB2}</span>
-                </div>
-              </div>
-            `;
-          }
+          let bonusesHtml = isTycoon ? `
+            <div class="flex items-center gap-2.5 tabular-nums text-xs text-slate-300">
+              <div class="flex items-baseline gap-1"><span class="text-[10px] text-slate-500 font-sans">筆頭</span><span class="js-b1-val inline-block min-w-[45px] text-right">${fin.b1}</span></div>
+              <div class="flex items-baseline gap-1"><span class="text-[10px] text-slate-500 font-sans">第2</span><span class="js-b2-val inline-block min-w-[45px] text-right">${fin.b2}</span></div>
+              <div class="flex items-baseline gap-1"><span class="text-[10px] text-slate-500 font-sans">第3</span><span class="js-b3-val inline-block min-w-[45px] text-right">${fin.b3}</span></div>
+            </div>
+          ` : `
+            <div class="flex items-center gap-3 tabular-nums text-xs text-slate-300">
+              <div class="flex items-baseline gap-1"><span class="text-[10px] text-slate-500 font-sans">筆頭</span><span class="js-b1-val inline-block min-w-[50px] text-right">${fin.b1}</span></div>
+              <div class="flex items-baseline gap-1"><span class="text-[10px] text-slate-500 font-sans">第2</span><span class="js-b2-val inline-block min-w-[50px] text-right">${fin.b2}</span></div>
+            </div>
+          `;
 
           const isJustSpawned = (newlyEstablishedId === hotel.id);
           const animationClass = isJustSpawned ? 'animate-card-spawn' : '';
 
           const cardHtml = `
             <div id="card-${hotel.id}" class="bg-slate-900 rounded-2xl p-3 mb-2 flex flex-col gap-2 transition-all ${animationClass}">
-              <!-- Top Row: Hotel Icon, Name, Building Count & Minimal Next Tier Hint -->
               <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-1.5 min-w-0">
                   <i class="fa-solid fa-hotel ${hotel.textColor} text-base shrink-0"></i>
                   <span class="font-bold text-base sm:text-lg ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
-                  
-                  <!-- Plain Text Building Count + Minimal Next Change Target Indicator (No "コマ", No ":") -->
-                  <div class="flex items-baseline shrink-0">
-                    <span class="text-xs font-mono font-bold text-slate-300">
+                  <div class="flex items-baseline gap-1 shrink-0 ml-0.5">
+                    <span class="text-xs tabular-nums font-bold text-slate-300">
                       <span class="js-size-val inline-block">${size}</span>コマ
                     </span>
-                    ${nextHintText}
+                    ${nextHintHtml}
                   </div>
                 </div>
 
-                <!-- Separated Reset & Grouped Stepper Buttons -->
                 <div class="flex items-center gap-2 shrink-0">
-                  <!-- Clear / Reset Button -->
-                  <button onclick="clearSize('${hotel.id}')" title="解散・リセット"
-                    class="w-7 h-8 text-slate-500 hover:text-rose-400 active:text-rose-400 rounded-lg text-xs flex items-center justify-center transition">
-                    <i class="fa-solid fa-rotate-left"></i>
+                  <button onclick="clearSize('${hotel.id}')" title="合併・解散（リセット）"
+                    class="w-7 h-8 text-slate-400 hover:text-amber-400 active:text-rose-400 rounded-lg text-xs flex items-center justify-center transition">
+                    <i class="fa-solid fa-code-merge"></i>
                   </button>
-
-                  <!-- Joined Stepper Group -->
                   <div class="inline-flex rounded-lg overflow-hidden bg-slate-950 p-0.5 shadow-inner">
                     <button onclick="changeSize('${hotel.id}', -1)" title="1減らす"
                       class="w-10 sm:w-11 h-8 bg-slate-900 hover:bg-slate-800 active:bg-slate-700 text-slate-200 font-bold text-sm rounded-l flex items-center justify-center transition">
@@ -791,11 +498,10 @@
                 </div>
               </div>
 
-              <!-- Bottom Row: White Stock Price & Bonuses -->
               <div class="flex items-center justify-between pt-0.5">
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[11px] text-slate-500 font-medium">株価</span>
-                  <span class="font-bold text-slate-100 text-base font-mono js-price-val inline-block min-w-[50px]">${fmtPrice}</span>
+                  <span class="font-bold text-slate-100 text-base tabular-nums js-price-val inline-block min-w-[50px]">${fin.price}</span>
                 </div>
                 ${bonusesHtml}
               </div>
@@ -803,28 +509,23 @@
           `;
           activeContainer.insertAdjacentHTML('beforeend', cardHtml);
         } else {
-          // UNESTABLISHED HOTEL
           unestablishedCount++;
           const buttonHtml = `
             <button onclick="establishHotel('${hotel.id}')" 
               class="bg-slate-900 hover:bg-slate-800 rounded-xl p-2.5 flex items-center justify-between text-left transition">
-              <div class="flex items-center gap-2 min-w-0">
+              <div class="flex items-center gap-1.5 min-w-0">
                 <i class="fa-solid fa-hotel ${hotel.textColor} text-xs shrink-0"></i>
                 <span class="font-semibold text-xs sm:text-sm ${hotel.textColor} truncate tracking-tight">${hotel.name}</span>
               </div>
-              <span class="text-[10px] text-slate-500 font-medium shrink-0">
-                + 設立
-              </span>
+              <span class="text-[10px] text-slate-500 font-medium shrink-0">+ 設立</span>
             </button>
           `;
           unestablishedContainer.insertAdjacentHTML('beforeend', buttonHtml);
         }
       });
 
-      // Reset newly established flag after render
       newlyEstablishedId = null;
 
-      // Show placeholder if no active hotels
       if (activeCount === 0) {
         activeContainer.innerHTML = `
           <div class="text-center py-10 text-slate-500 text-xs border border-dashed border-slate-900 rounded-2xl bg-slate-900/20">
@@ -835,19 +536,12 @@
         `;
       }
 
-      // Hide unestablished section if all 7 hotels are active
       if (unestablishedCount === 0) {
         unestablishedSection.classList.add('hidden');
       } else {
         unestablishedSection.classList.remove('hidden');
       }
     }
-
-    // Initialize on DOM load
-    window.addEventListener('DOMContentLoaded', () => {
-      render();
-    });
   </script>
 </body>
 </html>
-
